@@ -1,5 +1,5 @@
 const express = require("express");
-const Tour = require("../../src/models/tourModel");
+const Tour = require('../models/tourModel.js');
 const protect = require("../middleware/authMiddleware");
 
 const admin = require("../middleware/adminMiddleware");

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TourCard from "../components/TourCard";
+import api from "../api";
 
 const Tours = () => {
   const [tours, setTours] = useState([]);
@@ -9,7 +9,7 @@ const Tours = () => {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/tripora/tours");
+        const res = await api.get("/tours");
         setTours(res.data);
       } catch (error) {
         console.error("Error fetching tours:", error);

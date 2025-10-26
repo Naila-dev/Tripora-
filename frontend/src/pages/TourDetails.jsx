@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api";
+import { useAuth } from "../components/AuthContext";
 
 const TourDetail = () => {
   const { id } = useParams();
   const [tour, setTour] = useState(null);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/tripora/tours/${id}`);
+        const res = await api.get(`/tours/${id}`);
         setTour(res.data);
       } catch (err) {
         console.error("Error fetching tour:", err);
@@ -17,6 +20,17 @@ const TourDetail = () => {
     };
     fetchTour();
   }, [id]);
+
+  const handleBookNow = () => {
+    if (isAuthenticated) {
+      // User is logged in, proceed to booking page (we can build this next)
+      alert(`Redirecting to booking page for ${tour.title}...`);
+      // navigate(`/booking/${id}`);
+    } else {
+      // User is not logged in, redirect to login page
+      navigate('/login', { state: { from: `/tours/${id}` } });
+    }
+  };
 
   if (!tour) return <p className="text-center mt-5">Loading tour details...</p>;
 
@@ -36,7 +50,7 @@ const TourDetail = () => {
           <p>{tour.description}</p>
           <h4 className="text-success fw-bold">${tour.price}</h4>
           <p>Duration: {tour.duration}</p>
-          <button className="btn btn-success w-100 mt-3">Book Tour</button>
+          <button className="btn btn-success w-100 mt-3" onClick={handleBookNow}>Book Tour</button>
         </div>
       </div>
     </div>

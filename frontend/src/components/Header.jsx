@@ -2,7 +2,10 @@ import { FaPlaneDeparture } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "../pages/style.css";
 
+import { useAuth } from "./AuthContext";
 export default function Navbar() {
+  const { isAuthenticated, user, logout } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="container d-flex justify-content-between align-items-center">
@@ -17,8 +20,21 @@ export default function Navbar() {
           <li><Link to="/contact">Contact</Link></li>
         </ul>
         <div className="cta-buttons d-flex gap-2">
-            <button className="btn btn-outline-primary">Sign Up</button>
-          <button className="btn btn-outline-primary">Login</button>
+          {isAuthenticated ? (
+            <>
+              <span className="navbar-text me-2">Welcome, {user.name}!</span>
+              <button className="btn btn-outline-primary" onClick={logout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="btn btn-outline-primary">
+                Sign Up
+              </Link>
+              <Link to="/login" className="btn btn-outline-primary">Login</Link>
+            </>
+          )}
           <button className="btn btn-primary">Book Now</button>
         </div>
       </div>

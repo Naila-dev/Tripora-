@@ -1,16 +1,18 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api";
+import { useAuth } from "../components/AuthContext";
 
 function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const { login } = useAuth();
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("http://localhost:5000/tripora/auth/register", form);
-      localStorage.setItem("token", data.token);
+      const { data } = await api.post("/auth/register", form); // data contains { token, user }
+      login(data.user, data.token);
       alert("Registered successfully");
     } catch (err) {
       alert("Registration failed");
