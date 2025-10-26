@@ -9,7 +9,7 @@ function Register() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/auth/register", form);
+      const { data } = await axios.post("http://localhost:5000/tripora/auth/register", form);
       localStorage.setItem("token", data.token);
       alert("Registered successfully");
     } catch (err) {

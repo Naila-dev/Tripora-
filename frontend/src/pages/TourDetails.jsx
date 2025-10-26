@@ -1,50 +1,46 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-function TourDetail() {
+const TourDetail = () => {
   const { id } = useParams();
   const [tour, setTour] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/tours/${id}`)
-      .then(res => setTour(res.data))
-      .catch(err => console.error(err));
+    const fetchTour = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/tripora/tours/${id}`);
+        setTour(res.data);
+      } catch (err) {
+        console.error("Error fetching tour:", err);
+      }
+    };
+    fetchTour();
   }, [id]);
 
-  if (!tour) return <h4 className="text-center mt-5">Loading...</h4>;
+  if (!tour) return <p className="text-center mt-5">Loading tour details...</p>;
 
   return (
-    <div className="container mt-5">
-      <img src={tour.image} className="img-fluid mb-4" alt={tour.title} />
-      <h2>{tour.title}</h2>
-      <p><strong>Location:</strong> {tour.location}</p>
-      <p><strong>Price:</strong> ${tour.price}</p>
-      <p>{tour.description}</p>
-      <button className="btn btn-success">Book Now</button>
+    <div className="container py-5">
+      <div className="row">
+        <div className="col-md-6">
+          <img
+            src={tour.image}
+            alt={tour.title}
+            className="img-fluid rounded shadow"
+          />
+        </div>
+        <div className="col-md-6">
+          <h2>{tour.title}</h2>
+          <p className="text-muted">{tour.location}</p>
+          <p>{tour.description}</p>
+          <h4 className="text-success fw-bold">${tour.price}</h4>
+          <p>Duration: {tour.duration}</p>
+          <button className="btn btn-success w-100 mt-3">Book Tour</button>
+        </div>
+      </div>
     </div>
   );
-}
-
-export default TourDetail;
-    at Mongoose.connect (D:\End_Project1\tripora\backend\node_modules\mongoose\lib\mongoose.js:450:15)
-    at Object.<anonymous> (D:\End_Project1\tripora\backend\server.js:14:10)
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-
-dotenv.config(); // Make sure this is at the top
-
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error connecting to MongoDB: ${error.message}`);
-    process.exit(1); // Exit process with failure
-  }
 };
 
-// In your main server logic, call connectDB
-connectDB();
-
-// ... rest of your server setup (Express, routes, etc.)
+export default TourDetail;

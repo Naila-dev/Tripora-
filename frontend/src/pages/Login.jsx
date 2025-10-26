@@ -9,7 +9,7 @@ function Login() {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/auth/login", form);
+      const { data } = await axios.post("http://localhost:5000/tripora/auth/login", form);
       localStorage.setItem("token", data.token);
       alert("Logged in successfully");
     } catch (err) {

@@ -1,35 +1,39 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import TourCard from "../components/TourCard";
 
-function Tours() {
+const Tours = () => {
   const [tours, setTours] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/tours")
-      .then(res => setTours(res.data))
-      .catch(err => console.error(err));
+    const fetchTours = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/tripora/tours");
+        setTours(res.data);
+      } catch (error) {
+        console.error("Error fetching tours:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTours();
   }, []);
 
+  if (loading) return <p className="text-center mt-5">Loading tours...</p>;
+
   return (
-    <div className="container mt-4">
+    <div className="container py-4">
       <h2 className="text-center mb-4">Available Tours</h2>
-      <div className="row">
-        {tours.map(tour => (
-          <div key={tour._id} className="col-md-4 mb-3">
-            <div className="card h-100">
-              <img src={tour.image || "https://via.placeholder.com/300"} className="card-img-top" alt={tour.title} />
-              <div className="card-body">
-                <h5>{tour.title}</h5>
-                <p>{tour.location}</p>
-                <p>${tour.price}</p>
-                <a href={`/tours/${tour._id}`} className="btn btn-primary w-100">View</a>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="d-flex flex-wrap gap-3 justify-content-center">
+        {tours.length > 0 ? (
+          tours.map((tour) => <TourCard key={tour._id} tour={tour} />)
+        ) : (
+          <p>No tours available.</p>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Tours;

@@ -1,57 +1,78 @@
 const express = require("express");
-const router = express.Router();
-const Tour = require("../models/Tour");
+const Tour = require("../../src/models/tourModel");
+const protect = require("../middleware/authMiddleware");
 
-// GET /api/tours  → all tours
+const admin = require("../middleware/adminMiddleware");
+const router = express.Router();
+
+// GET all tours
 router.get("/", async (req, res) => {
   try {
-    const tours = await Tour.find();
+    const tours = await Tour.find().sort({ createdAt: -1 });
     res.json(tours);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// GET /api/tours/:id  → single tour
+// GET single tour by ID
 router.get("/:id", async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.id);
     if (!tour) return res.status(404).json({ message: "Tour not found" });
     res.json(tour);
-  } catch {
+  } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-// POST /api/tours  → admin create (simplified)
-router.post("/", async (req, res) => {
-  const { title, location, price, description, image } = req.body;
+// CREATE new tour (admin only)
+router.post("/", protect, admin, async (req, res) => {
   try {
-    const tour = new Tour({ title, location, price, description, image });
-    await tour.save();
-    res.status(201).json(tour);
-  } catch {
-    res.status(400).json({ message: "Invalid data" });
+    const { title, description, price, location, image, duration } = req.body;
+
+    if (!title || !description || !price || !location || !image || !duration) {
+      return res.status(400).json({ message: "Please provide all required fields." });
+    }
+
+    const tour = new Tour({
+      title,
+      description,
+      price,
+      location,
+      image,
+      duration,
+      createdBy: req.user._id,
+    });
+
+    const savedTour = await tour.save();
+    res.status(201).json(savedTour);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// PUT /api/tours/:id  → update
-router.put("/:id", async (req, res) => {
+// UPDATE tour (admin only)
+router.put("/:id", protect, admin, async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json(tour);
-  } catch {
-    res.status(400).json({ message: "Update failed" });
+    const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedTour) return res.status(404).json({ message: "Tour not found" });
+
+    res.json(updatedTour);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// DELETE /api/tours/:id
-router.delete("/:id", async (req, res) => {
+// DELETE tour (admin only)
+router.delete("/:id", protect, admin, async (req, res) => {
   try {
-    await Tour.findByIdAndDelete(req.params.id);
+    const deletedTour = await Tour.findByIdAndDelete(req.params.id);
+    if (!deletedTour) return res.status(404).json({ message: "Tour not found" });
+
     res.json({ message: "Tour deleted" });
-  } catch {
-    res.status(500).json({ message: "Delete failed" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
 
