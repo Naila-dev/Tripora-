@@ -1,9 +1,10 @@
 // src/pages/Blog.jsx
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./style.css";
+import Pagination from "../components/Pagination";
+
 
 const blogPosts = [
   {
@@ -60,15 +61,16 @@ const Blog = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    document.title = "Blog - Tripora";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', 'Read our latest travel stories, tips, and guides.');
+  }, []);
 
   return (
     <div className="blog-page">
-      <Helmet>
-        <title>Blog - Tripora</title>
-        <meta name="description" content="Read our latest travel stories, tips, and guides." />
-      </Helmet>
 
       {/* Hero Section */}
       <section

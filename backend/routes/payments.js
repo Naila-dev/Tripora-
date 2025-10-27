@@ -4,6 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 require("dotenv").config();
 
+// M-Pesa credentials from env
 const {
   MPESA_CONSUMER_KEY,
   MPESA_CONSUMER_SECRET,
@@ -31,7 +32,7 @@ router.post("/stkpush", async (req, res) => {
       .toISOString()
       .replace(/[-T:\.Z]/g, "")
       .slice(0, 14);
-
+// Generate password
     const password = Buffer.from(`${MPESA_SHORTCODE}${MPESA_PASSKEY}${timestamp}`).toString("base64");
 
     const payload = {

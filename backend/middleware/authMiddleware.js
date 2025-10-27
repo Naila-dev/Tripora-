@@ -1,6 +1,9 @@
+// backend/middleware/authMiddleware.js
+
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
+// Middleware to protect routes
+// Verify JWT and attach user to request
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;

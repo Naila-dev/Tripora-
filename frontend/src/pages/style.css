@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;500&display=swap');
 /* Add any page-specific styles for Home.jsx here */
 body {
     font-family: 'Poppins', sans-serif;
@@ -49,186 +50,385 @@ a {
 
 /* ======================
    Navbar
-====================== */
+  =======================
+
+/* --- Navbar --- */
+/* Fade-in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+:root {
+  --primary-color: #16a085;   /* Text color */
+  --accent-color: #f39c12;   /* Highlight color */
+  --bg-light: #f9f9f9;; /* Highlight color */
+  --bg-light: #f9f9f9;
+}
+
+:root {
+  --primary-color: #16a085;   /* your main green */
+  --accent-color: #f39c12;    /* your orange */
+  --text-color: #333;
+  --bg-light: #f9f9f9;
+}
+
+/* Navbar Base */
 .site-navbar {
-  position: fixed;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px 0;
+  background-color: var(--bg-light);
+  padding: 1rem 0;
   transition: all 0.3s ease;
 }
 
-.site-navbar.scrolled {
-  background-color: rgba(0, 0, 0, 0.85);
+/* Logo */
+.logo-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: 1px;
 }
 
-.site-navbar .logo-text {
-  font-weight: bold;
-  font-size: 24px;
-  color: #007bff;
+.logo-text span {
+  color: var(--accent-color);
 }
 
+/* Nav list */
 .nav-list {
   list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list li {
+  display: inline-block;
 }
 
 .nav-list li a {
-  color: #333;
+  text-decoration: none;
+  color: var(--primary-color);
   font-weight: 500;
-  padding: 5px 10px;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
+  background: none !important;
+  border: none !important;
 }
 
 .nav-list li a:hover {
-  color: #007bff;
+  color: var(--accent-color);
 }
 
-/* Mobile menu */
-.mobile-toggle {
+
+/* Login & Register buttons */
+.nav-btn {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.4rem 1rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: transparent;
+  margin-left: 0.5rem;
+}
+
+.nav-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
   background: none;
-  border: none;
-  font-size: 18px;
+}
+/* 
+/* Remove Bootstrap’s default anchor and button styles */
+/* a, */
+/* a:visited, */
+/* a:focus, */
+/* a:active { */
+  /* background: none !important; */
+  /* border: none !important; */
+  /* box-shadow: none !important; */
+/* } */ */
+
+/* Scroll effect */
+.site-navbar.scrolled {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
+/* Mobile Menu */
 .mobile-menu {
-  position: fixed;
-  top: 0;
+  position: absolute;
+  top: 70px;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: #111;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  z-index: 1000;
+  background: var(--bg-light);
+  padding: 1rem;
 }
 
 .mobile-menu ul {
   list-style: none;
-  text-align: center;
   padding: 0;
+  margin: 0;
 }
 
 .mobile-menu li {
-  margin: 20px 0;
+  margin-bottom: 1rem;
 }
 
 .mobile-menu a {
-  color: #fff;
-  font-size: 24px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  background: none !important;
+  border: none !important;
 }
+
+.mobile-menu a:hover {
+  color: var(--accent-color);
+}
+
 
 /* ======================
    Hero Section
 ====================== */
 .hero {
   position: relative;
-  color: white;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  color: #fff;
 }
 
-.hero .overlay {
+/* Overlay */
+.hero::before {
+  content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
-.hero .hero-content {
+/* Hero content */
+.hero-content {
   position: relative;
   z-index: 2;
+  max-width: 700px;
+  padding: 0 20px;
 }
 
-.hero h1 {
-  font-size: 48px;
-  font-weight: bold;
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
-.hero p {
-  font-size: 20px;
-  margin-top: 15px;
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+/* Search section */
+.hero-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .hero-search input {
-  max-width: 400px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 320px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
 }
 
-.hero-search .btn {
-  margin-top: 10px;
+.hero-search button {
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: 600;
 }
 
-/* ======================
-   Highlights / Tours
-====================== */
-.highlights h2 {
-  text-align: center;
-  margin-bottom: 40px;
+/* Responsive */
+@media (min-width: 768px) {
+  .hero-search {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .hero-content h1 {
+    font-size: 3.5rem;
+  }
 }
 
-.tours-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+/* ======================= */
+   /* Unique Selling Points (USP)   */
+/* ====================== */
+
+.usp-section {
+  background-color: #f9f9f9;
 }
 
-/* ======================
-   USPs
-====================== */
-.usp h2 {
-  font-size: 32px;
-  margin-bottom: 30px;
+.usp-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  position: relative;
+  display: inline-block;
 }
 
-.usp .row div {
-  padding: 20px;
+.usp-title span {
+  color: var(--primary-color);
+}
+
+.usp-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 60px;
+  height: 3px;
+  background-color: var(--accent-color);
+  transform: translateX(-50%);
+  border-radius: 3px;
+}
+
+.usp-card {
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 2rem 1.5rem;
+  transition: all 0.3s ease;
+  height: 100%;
 }
+
+.usp-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.usp-card .icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.usp-card h5 {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.8rem;
+}
+
+.usp-card p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+
 
 /* ======================
    Testimonials
 ====================== */
 .testimonials {
-  background-color: #f7f7f7;
-  padding: 60px 20px;
-  text-align: center;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: #fff;
 }
 
 .testimonials h2 {
-  font-size: 32px;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.testimonials .carousel-item {
+  padding: 40px 20px;
+}
+
+.testimonials img {
+  border: 4px solid #fff;
+  object-fit: cover;
 }
 
 .testimonials p {
-  font-size: 20px;
-  font-style: italic;
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
 }
+
+.testimonials .stars {
+  color: #ffd700;
+  font-size: 1.3rem;
+  margin-top: 5px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
 
 /* ======================
    Blog
 ====================== */
-.blog h2 {
-  text-align: center;
-  margin-bottom: 40px;
+.blog-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-color);
+  position: relative;
+  display: inline-block;
 }
 
-.blog img {
+.blog-title span {
+  color: var(--primary-color);
+}
+
+.blog-title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  width: 60px;
+  height: 3px;
+  background-color: var(--accent-color);
+  transform: translateX(-50%);
+  border-radius: 3px;
+}
+
+.blog-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card img {
   width: 100%;
-  height: 200px;
+  height: 220px;
   object-fit: cover;
-  border-radius: 8px;
 }
 
-.blog h5 {
-  margin-top: 10px;
-  text-align: center;
+.blog-content {
+  padding: 1.5rem;
+}
+
+.blog-content h5 {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.6rem;
+}
+
+.blog-content p {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
 }
 
 /* ======================
@@ -605,7 +805,8 @@ ul.list-unstyled li {
   justify-content: center;
   color: white;
   text-align: center;
-  background-image: url("../images/aboutp1.jpg");
+  /* background-image moved to the About page component so the public image is used at runtime
+     and webpack/cra won't try to resolve it during build. */
   background-size: cover;
   background-position: center;
 }

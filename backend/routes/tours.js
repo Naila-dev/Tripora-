@@ -1,3 +1,4 @@
+// backend/routes/tours.js
 const express = require("express");
 const Tour = require('../models/tourModel.js');
 const protect = require("../middleware/authMiddleware");

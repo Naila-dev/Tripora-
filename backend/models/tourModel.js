@@ -1,5 +1,6 @@
+// backend/models/tourModel.js
 const mongoose = require('mongoose');
-
+// Tour schema
 const tourSchema = new mongoose.Schema({
   title: { type: String, required: true },
   location: String,

@@ -6,6 +6,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./style.css";
 
+
 const About = () => {
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -17,6 +18,11 @@ const About = () => {
       <section
         className="about-hero"
         data-aos="fade-in"
+        style={{
+          backgroundImage: `url(/images/hero1.jpeg)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
       >
         <div className="overlay"></div>
         <div className="hero-content">
