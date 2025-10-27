@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import TourCard from "../components/TourCard";
 import api from "../api";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const Tours = () => {
   const [tours, setTours] = useState([]);
@@ -23,16 +27,20 @@ const Tours = () => {
   if (loading) return <p className="text-center mt-5">Loading tours...</p>;
 
   return (
-    <div className="container py-4">
-      <h2 className="text-center mb-4">Available Tours</h2>
-      <div className="d-flex flex-wrap gap-3 justify-content-center">
-        {tours.length > 0 ? (
-          tours.map((tour) => <TourCard key={tour._id} tour={tour} />)
-        ) : (
-          <p>No tours available.</p>
-        )}
+    <>
+      <Header />
+      <div className="container py-4" style={{ paddingTop: '120px' }}>
+        <h2 className="text-center mb-4">Available Tours</h2>
+        <div className="d-flex flex-wrap gap-3 justify-content-center">
+          {tours.length > 0 ? (
+            tours.map((tour) => <TourCard key={tour._id} tour={tour} />)
+          ) : (
+            <p>No tours available.</p>
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

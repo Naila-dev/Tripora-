@@ -7,6 +7,15 @@ const schema = new mongoose.Schema({
   tour:{type: mongoose.Schema.Types.ObjectId, ref:'Tour'},
   date:Date,
   guests:Number,
-  paymentStatus:{type:String, default:'pending'}
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'processing', 'completed', 'failed', 'cancelled', 'refunded'],
+    default: 'pending'
+  },
+  paymentError: {
+    code: String,
+    message: String,
+    timestamp: Date
+  }
 });
 module.exports = mongoose.model('Booking', schema);

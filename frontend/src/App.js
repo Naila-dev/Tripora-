@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contacts";
+import Booking from "./pages/Booking";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/booking/:tourId" element={<Booking />} />
           {/* You can add more routes here for about, blog, contact etc. */}
         </Routes>
       </div>

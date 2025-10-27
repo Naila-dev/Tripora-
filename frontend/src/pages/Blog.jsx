@@ -4,6 +4,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./style.css";
 import Pagination from "../components/Pagination";
+import Header from "../components/Navbar";
+import Footer from "../components/Footer";
 
 
 const blogPosts = [
@@ -12,7 +14,7 @@ const blogPosts = [
     slug: "kayaking-adventures-alaska",
     title: "Kayaking Adventures in Alaska",
     category: "Adventure",
-    image: "/images/blog-alaska.jpg",
+    image: "/images/beach2.jpeg",
     excerpt: "Explore Alaska’s wild rivers and glaciers on a thrilling kayaking tour with our expert guides.",
   },
   {
@@ -20,7 +22,7 @@ const blogPosts = [
     slug: "family-friendly-safari-destinations",
     title: "Top 10 Family-Friendly Safari Destinations",
     category: "Family",
-    image: "/images/blog-safari.jpg",
+    image: "/images/savannah2.jpeg",
     excerpt: "Discover the best safaris suitable for families, with tips for a smooth adventure.",
   },
   {
@@ -28,7 +30,7 @@ const blogPosts = [
     slug: "packing-tips-backpackers",
     title: "Packing Tips for Backpackers",
     category: "Tips",
-    image: "/images/blog-packing.jpg",
+    image: "/images/familia.jpeg",
     excerpt: "Maximize your backpack space and travel efficiently with these essential tips.",
   },
   {
@@ -36,7 +38,7 @@ const blogPosts = [
     slug: "best-winter-destinations-adventure",
     title: "Best Winter Destinations for Adventure",
     category: "Adventure",
-    image: "/images/blog-winter.jpg",
+    image: "/images/antelopes.jpeg",
     excerpt: "Explore thrilling winter destinations and enjoy snow activities across the globe.",
   },
   // add more posts as needed
@@ -70,7 +72,9 @@ const Blog = () => {
   }, []);
 
   return (
-    <div className="blog-page">
+    <>
+      <Header />
+      <div className="blog-page">
 
       {/* Hero Section */}
       <section
@@ -123,7 +127,9 @@ const Blog = () => {
           currentPage={currentPage}
         />
       </div>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 };
 

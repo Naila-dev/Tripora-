@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import { useAuth } from "../components/AuthContext";
 
 const TourDetail = () => {
@@ -23,11 +25,9 @@ const TourDetail = () => {
 
   const handleBookNow = () => {
     if (isAuthenticated) {
-      // User is logged in, proceed to booking page (we can build this next)
       alert(`Redirecting to booking page for ${tour.title}...`);
       // navigate(`/booking/${id}`);
     } else {
-      // User is not logged in, redirect to login page
       navigate('/login', { state: { from: `/tours/${id}` } });
     }
   };
@@ -35,7 +35,7 @@ const TourDetail = () => {
   if (!tour) return <p className="text-center mt-5">Loading tour details...</p>;
 
   return (
-    <div className="container py-5">
+    <div className="container py-5" style={{ paddingTop: '120px' }}>
       <div className="row">
         <div className="col-md-6">
           <img
