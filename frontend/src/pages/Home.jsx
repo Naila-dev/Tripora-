@@ -263,7 +263,19 @@ const HomePage = () => {
       <a href="/about" className="btn-about">Read More</a>
     </div>
     <div className="col-md-6 text-center">
-      <img src="/images/view1.jpg" alt="About Tripora" className="img-fluid rounded shadow height='400px' width='400px' "/>
+     <img
+  src="/images/view1.jpg"
+  alt="About Tripora"
+  style={{
+    width: "400px",   // Set the width
+    height: "400px",  // Set the height
+    objectFit: "cover", // Ensures the image keeps aspect ratio and fills the box
+    borderRadius: "10px", // optional rounded corners
+    boxShadow: "0 6px 15px rgba(0,0,0,0.2)" // optional shadow
+  }}
+/>
+
+
     </div>
   </div>
 </section>
@@ -348,7 +360,7 @@ const HomePage = () => {
           <div className="row g-4">
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Travel Tips" />
+                <img src="/images/hotel4.jpeg" className="img-fluid rounded-top" alt="Travel Tips" />
                 <div className="blog-content">
                   <h5>Travel Tips for Africa</h5>
                   <p>Essential advice to make your African adventures smooth and memorable.</p>
@@ -359,7 +371,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Top Destinations" />
+                <img src="/images/map.jpg" className="img-fluid rounded-top" alt="Top Destinations" />
                 <div className="blog-content">
                   <h5>Top Destinations 2025</h5>
                   <p>Explore trending travel spots that should be on your bucket list this year.</p>
@@ -370,7 +382,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Packing Essentials" />
+                <img src="/images/tourists.jpg" className="img-fluid rounded-top" alt="Packing Essentials" />
                 <div className="blog-content">
                   <h5>Packing Essentials</h5>
                   <p>Smart packing tips to help you travel light and stress-free anywhere.</p>
