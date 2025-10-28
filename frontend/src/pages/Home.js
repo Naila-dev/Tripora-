@@ -106,12 +106,11 @@ const HomePage = () => {
       {/* Hero Section */}
       <section
         className="hero"
-        style={{
-          backgroundImage: `url(${process.env.PUBLIC_URL}/images/herovideo.mp4)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
       >
+        <video autoPlay loop muted playsInline className="hero-video">
+          <source src={`${process.env.PUBLIC_URL}/images/herovideo.mp4`} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
         <div className="hero-content">
           <h1 data-aos="fade-up">Adventure Tours for the Bold Traveler</h1>
           <p data-aos="fade-up" data-aos-delay="100">
@@ -229,7 +228,7 @@ const HomePage = () => {
 
     <div className="col-md-6 text-center">
       <img
-        src="/images/view1.jpg"
+        src={`${process.env.PUBLIC_URL}/images/view1.jpg`}
         alt="About Tripora"
         className="img-fluid rounded shadow"
         style={{ height: "400px", objectFit: "cover" }}
@@ -279,19 +278,19 @@ const HomePage = () => {
           <div id="testimonialCarousel" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
               <div className="carousel-item active">
-                <img src="/images/testimonial1.jpg" alt="Traveler 1" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/testimonial1.jpg`} alt="Traveler 1" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Tripora made my vacation seamless and unforgettable."</p>
                 <h6 className="fw-bold mt-3">— Sarah M., USA</h6>
                 <div className="stars">★★★★★</div>
               </div>
               <div className="carousel-item">
-                <img src="/images/testimonial2.jpg" alt="Traveler 2" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/testimonial2.jpg`} alt="Traveler 2" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Best travel company I've ever used! Professional and fun."</p>
                 <h6 className="fw-bold mt-3">— Daniel K., Kenya</h6>
                 <div className="stars">★★★★★</div>
               </div>
               <div className="carousel-item">
-                <img src="/images/testimonial3.jpg" alt="Traveler 3" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/testimonial3.jpg`} alt="Traveler 3" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Every detail was perfectly planned. Highly recommend Tripora!"</p>
                 <h6 className="fw-bold mt-3">— Amina R., Canada</h6>
                 <div className="stars">★★★★★</div>
@@ -318,7 +317,7 @@ const HomePage = () => {
           <div className="row g-4">
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Travel Tips" />
+                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Travel Tips" />
                 <div className="blog-content">
                   <h5>Travel Tips for Africa</h5>
                   <p>Essential advice to make your African adventures smooth and memorable.</p>
@@ -329,7 +328,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Top Destinations" />
+                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Top Destinations" />
                 <div className="blog-content">
                   <h5>Top Destinations 2025</h5>
                   <p>Explore trending travel spots that should be on your bucket list this year.</p>
@@ -340,7 +339,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src="/images/aboutp1.jpg" className="img-fluid rounded-top" alt="Packing Essentials" />
+                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Packing Essentials" />
                 <div className="blog-content">
                   <h5>Packing Essentials</h5>
                   <p>Smart packing tips to help you travel light and stress-free anywhere.</p>

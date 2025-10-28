@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 const TourCard = ({ tour }) => {
   if (!tour) return null;
 
-  // Ensure consistent image path
   const imgSrc = tour.image
-    ? `/tripora/images/${tour.image.replace(/^images[\\/]/, "")}`
-    : "/tripora/images/default.jpg";
+  ? `/images/${tour.image.replace(/^images[\\/]/, "")}`
+  : "/images/default.jpg";
+
 
   return (
     <div className="tour-card card h-100 shadow-sm" data-aos="fade-up">

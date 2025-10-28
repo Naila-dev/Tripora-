@@ -9,7 +9,7 @@ const Navbar = () => {
     <header className="navbar site-navbar">
       <div className="container d-flex justify-content-between align-items-center">
         <div className="logo d-flex align-items-center gap-2">
-        <img src="/images/logos/logo192.png" alt="Tripora Logo" className="logo-image" />
+        <img src={`${process.env.PUBLIC_URL}/images/logos/logo192.png`} alt="Tripora Logo" className="logo-image" />
           <NavLink to="/" className="logo-text text-decoration-none">
             Tripora<span>Tours</span>
           </NavLink>
