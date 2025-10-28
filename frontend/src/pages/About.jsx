@@ -4,8 +4,6 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import * as bootstrap from "bootstrap";
 import "aos/dist/aos.css";
 import "./style.css";
-import Header from "../components/Navbar";
-import Footer from "../components/Footer";
 import { NavLink } from "react-router-dom";
 import AOS from "aos";
 
@@ -20,49 +18,48 @@ const About = () => {
   return (
     <div className="about-page">
       
-      {/* Hero Section */}
-      <section
-        className="about-hero"
-        data-aos="fade-in"
-        style={{
-          backgroundImage: `url(/images/hero2.jpeg)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        <Header />
-        <div className="overlay"></div>
-        <div className="hero-content">
-          <h1 className="display-4 fw-bold" data-aos="fade-up">About Tripora</h1>
-          <p className="lead">Discover our story, mission, and the people behind your adventures</p>
-        </div>
-      </section>
 
-      <section className="container py-5">
-        <div className="row align-items-center">
-          {/* Text */}
-          <div className="col-md-6">
-            <h2 className="fw-bold text-success mb-4">Our Story</h2>
-            <p className="lead text-muted">
-              Tripora was founded out of a passion for travel and a frustration with
-              the lack of authentic experiences available to tourists. Our mission is
-              to connect travelers with meaningful adventures while supporting local
-              communities and sustainable tourism.
-            </p>
-            <button className="btn-read-more">Read More</button>
-          </div>
+  {/* Hero Section */}
+  <section
+    className="about-hero"
+    data-aos="fade-in"
+    style={{
+      backgroundImage: `url(/images/hero2.jpeg)`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+    }}
+  >
+    <div className="overlay"></div>
+    <div className="hero-content">
+      <h1 className="display-4 fw-bold" data-aos="fade-up">About Tripora</h1>
+      <p className="lead">Discover our story, mission, and the people behind your adventures</p>
+    </div>
+  </section>
 
-          {/* Image */}
-          <div className="col-md-6 text-center">
-            <img
-              src="/images/view1.jpg"
-              alt="Our Story"
-              className="img-fluid rounded shadow"
-              style={{ maxHeight: "400px", objectFit: "cover" }}
-            />
-          </div>
-        </div>
-      </section>
+  <section className="container py-5">
+    <div className="row align-items-center">
+      <div className="col-md-6">
+        <h2 className="fw-bold text-success mb-4">Our Story</h2>
+        <p className="lead text-muted">
+          Tripora was founded out of a passion for travel and a frustration with
+          the lack of authentic experiences available to tourists. Our mission is
+          to connect travelers with meaningful adventures while supporting local
+          communities and sustainable tourism.
+        </p>
+        <button className="btn-read-more">Read More</button>
+      </div>
+
+      <div className="col-md-6 text-center">
+        <img
+          src="/images/view1.jpg"
+          alt="Our Story"
+          className="img-fluid rounded shadow"
+          style={{ maxHeight: "400px", objectFit: "cover" }}
+        />
+      </div>
+    </div>
+  </section>
+
 
       <section className="mission-section py-5 bg-light">
         <div className="container text-center">
@@ -147,17 +144,17 @@ const About = () => {
               </div>
             </div>
 
-            {/* Member 3 */}
+           {/* Member 3 */}
             <div className="col-md-4">
               <div className="team-card p-4 shadow-sm rounded">
                 <img
-                  src="/images/teamg4.jpg"
-                  alt="Operations"
+                  src="/images/teamg3.jpeg"
+                  alt="Tour Guide"
                   className="team-member-img mb-3"
                 />
-                <h5 className="fw-bold">Emily Chenai</h5>
-                <p className="text-muted mb-1">Operations Manager</p>
-                <p className="small text-secondary">
+                <h5 className="fw-bold">John wasike</h5>
+                <p className="text-muted mb-1">Lead Tour Guide</p>
+ <p className="small text-secondary">
                   Ensures seamless logistics and outstanding service to keep every
                   traveler’s journey stress-free.
                 </p>
@@ -219,10 +216,8 @@ const About = () => {
         <h3>Ready to start your next adventure?</h3>
         <NavLink to="/tours" className="btn btn-light text-black btn-lg mt-3">Explore Tours</NavLink>
       </section>
-      <Footer />
-    </div>
 
-    
+    </div>
   );
 };
 

@@ -89,8 +89,144 @@ const tours = [
     description: 'Glide through the serene waterways of the Okavango Delta in a traditional mokoro canoe, spotting incredible birdlife and wildlife.',
     image: '/images/tour-10.jpg',
   },
-  
+
+  {
+    title: 'Masai Mara Great Migration Safari',
+    location: 'Masai Mara',
+    price: 2800,
+    duration: '6 days',
+    description:
+      'Experience the world-famous Great Migration and spot the Big Five in the breathtaking Masai Mara National Reserve.',
+    image: '/images/migration.jpeg',
+  },
+  {
+    title: 'Amboseli Safari & Kilimanjaro Views',
+    location: 'Amboseli National Park',
+    price: 2200,
+    duration: '4 days',
+    description:
+      'Witness herds of elephants and capture stunning views of Mount Kilimanjaro in this unforgettable safari experience.',
+    image: '/images/antelopes.jpeg',
+  },
+  {
+    title: 'Diani Beach Paradise Escape',
+    location: 'Diani Beach, Ukunda',
+    price: 1800,
+    duration: '5 days',
+    description:
+      'Relax on Kenya’s most beautiful white-sand beach, enjoy water sports, and explore local coastal culture.',
+    image: '/images/diani.jpg',
+  },
+  {
+    title: 'Mount Kenya Climbing Adventure',
+    location: 'Mount Kenya National Park',
+    price: 2500,
+    duration: '5 days',
+    description:
+      'Conquer Africa’s second-highest mountain and enjoy scenic alpine landscapes, glaciers, and wildlife along the trail.',
+    image: '/images/mountain.jpeg',
+  },
+  {
+    title: 'Lake Nakuru Flamingo Safari',
+    location: 'Lake Nakuru National Park',
+    price: 1500,
+    duration: '3 days',
+    description:
+      'Explore Lake Nakuru’s pink flamingo shores and spot rhinos, lions, and leopards in the Great Rift Valley.',
+    image: '/images/coastalpathway.jpeg',
+  },
+  {
+    title: 'Samburu Culture & Wildlife Expedition',
+    location: 'Samburu National Reserve',
+    price: 2600,
+    duration: '5 days',
+    description:
+      'Discover the unique wildlife of northern Kenya and immerse yourself in Samburu tribal culture and traditions.',
+    image: '/images/river.jpeg',
+  },
+  {
+    title: 'Lamu Island Heritage Tour',
+    location: 'Lamu Island',
+    price: 1900,
+    duration: '4 days',
+    description:
+      'Step back in time on the ancient streets of Lamu, a UNESCO World Heritage site rich in Swahili culture and charm.',
+    image: '/images/coast.jpeg',
+  },
+  {
+    title: 'Tsavo East & West Safari Adventure',
+    location: 'Tsavo National Park',
+    price: 2300,
+    duration: '5 days',
+    description:
+      'Explore Kenya’s largest national park, home to red elephants, lions, and rugged savannah landscapes.',
+    image: '/images/savannah2.jpeg',
+  },
+  {
+    title: 'Hell’s Gate Biking & Hiking Experience',
+    location: 'Naivasha',
+    price: 1200,
+    duration: '2 days',
+    description:
+      'Ride through gorges and cliffs in Hell’s Gate National Park, known for its dramatic scenery and geothermal features.',
+    image: '/images/view1.jpg',
+  },
+  {
+    title: 'Nairobi City & Wildlife Tour',
+    location: 'Nairobi',
+    price: 900,
+    duration: '2 days',
+    description:
+      'Discover Nairobi’s best — visit the Giraffe Centre, David Sheldrick Elephant Orphanage, and Nairobi National Park.',
+    image: '/images/kenya-nairobi.jpg',
+  },
+  {
+    title: 'Lake Naivasha Boat & Crescent Island Tour',
+    location: 'Lake Naivasha',
+    price: 1300,
+    duration: '2 days',
+    description:
+      'Take a peaceful boat ride among hippos and enjoy a guided walk among giraffes and zebras on Crescent Island.',
+    image: '/images/island.jpeg',
+  },
+  {
+    title: 'Aberdare Waterfalls & Tree Lodge Stay',
+    location: 'Aberdare Ranges',
+    price: 1600,
+    duration: '3 days',
+    description:
+      'Stay in a treetop lodge, enjoy cool mountain air, and see elephants at the forest waterholes in Aberdare National Park.',
+    image: '/images/waterfall.jpg',
+  },
+  {
+    title: 'Malindi & Watamu Coastal Retreat',
+    location: 'Malindi & Watamu',
+    price: 1700,
+    duration: '4 days',
+    description:
+      'Unwind on Kenya’s coral coast, visit the Gede Ruins, and snorkel in the clear waters of Watamu Marine Park.',
+    image: '/images/beach2.jpg',
+  },
+  {
+    title: 'Ol Pejeta Rhino Sanctuary Safari',
+    location: 'Ol Pejeta Conservancy',
+    price: 2100,
+    duration: '4 days',
+    description:
+      'Visit the world’s last northern white rhinos and experience close-up encounters with lions and chimps.',
+    image: '/images/antelopes.jpeg',
+  },
+  {
+    title: 'Turkana Desert & Lake Adventure',
+    location: 'Lake Turkana',
+    price: 3500,
+    duration: '7 days',
+    description:
+      'Embark on an epic journey to the Jade Sea, exploring remote desert landscapes and ancient rock art.',
+    image: '/images/savannah.jpg',
+  },
 ];
+
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
