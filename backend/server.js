@@ -1,49 +1,44 @@
+// backend/server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
-const connectDB = require("./config/db");
-// Load env vars
+
 dotenv.config();
-connectDB();
-// Initialize app
 const app = express();
+
+// ====== Middleware ======
 app.use(express.json());
-app.use(cors());
 
-    // Serve frontend build static assets (images, css, js) under /tripora
-const publicPath = path.join(__dirname, "..", "frontend", "public");
-const buildPath = path.join(__dirname, "..", "frontend", "build");
-// Serve images at /tripora/images/*
-app.use('/tripora/images', express.static(path.join(publicPath, 'images')));
-// Serve other static assets (js/css)
-app.use('/tripora/static', express.static(path.join(buildPath, 'static')));
+// Allow frontend localhost
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 
-// Routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/tours", require("./routes/tours"));
-app.use("/api/bookings", require("./routes/bookings"));
-app.use("/api/payments", require("./routes/payments"));
+// ====== Connect DB ======
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
-// Serve React app for all other routes
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(buildPath, 'index.html'));
-});
-// --- Production Build Setup ---
-if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, '..', 'frontend', 'build');
+// ====== Models ======
+const Tour = require("./models/Tour");
+const Booking = require("./models/Booking");
+const User = require("./models/User");
 
-  // Serve static files from the React build folder
-  app.use(express.static(buildPath));
+// ====== Routes ======
+app.use("/tripora/tours", require("./routes/tours"));
+app.use("/tripora/bookings", require("./routes/bookings"));
+app.use("/tripora/payments", require("./routes/payments"));
+app.use("/tripora/auth", require("./routes/auth"));
 
-  // The "catchall" handler: for any request that doesn't match one above,
-  // send back React's index.html file.
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(buildPath, 'index.html'));
+// ====== Serve Frontend in Production ======
+const buildPath = path.join(__dirname, "../frontend/build");
+if (process.env.NODE_ENV === "production") {
+  app.use("/tripora", express.static(buildPath));
+  app.get("/tripora/*", (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
   });
 }
 
-// Start server
+// ====== Start Server ======
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
