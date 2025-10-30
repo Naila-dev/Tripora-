@@ -1,3 +1,4 @@
+// backend/middleware/authMiddleware.js
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
@@ -17,4 +18,14 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = protect;
+// ✅ Add admin middleware
+const admin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(403).json({ message: "Admin access denied" });
+  }
+};
+
+// ✅ Export both
+module.exports = { protect, admin };

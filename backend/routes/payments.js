@@ -1,7 +1,7 @@
 // backend/routes/payments.js
 const express = require("express");
 const router = express.Router();
-const protect = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 const paymentController = require("../controllers/paymentController");
 
 router.post("/stkpush", protect, paymentController.stkPush);

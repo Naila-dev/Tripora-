@@ -1,11 +1,33 @@
-// backend/routes/payments.js
-const express = require("express");
-const router = express.Router();
-const protect = require("../middleware/authMiddleware");
-const paymentController = require("../controllers/paymentController");
+// backend/models/Payment.js
+const mongoose = require("mongoose");
 
-router.post("/stkpush", protect, paymentController.stkPush);
-router.post("/mpesa-callback", paymentController.mpesaCallback);
-router.get("/status/:bookingId", protect, paymentController.getStatus);
+const paymentSchema = new mongoose.Schema({
+  booking: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Booking",
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["processing", "completed", "failed"],
+    default: "processing",
+  },
+  paidAt: {
+    type: Date,
+  },
+  error: {
+    code: { type: Number },
+    message: { type: String },
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
-module.exports = router;
+module.exports = mongoose.model("Payment", paymentSchema);
+

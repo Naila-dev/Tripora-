@@ -14,3 +14,4 @@ router.put("/:id", protect, admin, tourController.updateTour);
 router.delete("/:id", protect, admin, tourController.deleteTour);
 
 module.exports = router;
+

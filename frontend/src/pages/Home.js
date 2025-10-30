@@ -1,16 +1,8 @@
-// frontend/src/pages/Home.jsx
-import React, { useState, useEffect } from "react"; // useState will be used by other hooks
-import "bootstrap/dist/css/bootstrap.min.css"
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-import { FaArrowUp } from "react-icons/fa";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "./style.css";
-import TourCard from "../components/TourCard.jsx";
-import AuthModals from "../components/AuthModals";
-import "./FeaturedTours.css";
-import api from "../api";
 import { NavLink } from "react-router-dom";
+import api from "../api"; // Assuming api.js is in src/
 
 // Home Page Component
 const HomePage = () => {
@@ -19,12 +11,12 @@ const HomePage = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  useEffect(() => {
-    AOS.init({ duration: 1000 });
-  }, []);
+  // ✅ Removed AOS to prevent reference error
+  // useEffect(() => {
+  //   AOS.init({ duration: 1000 });
+  // }, []);
 
   // Fetch tours from API
-  //this is the api to fetch tours from the backend http://localhost:5000/api/tours
   useEffect(() => {
     const fetchTours = async () => {
       try {
@@ -44,7 +36,6 @@ const HomePage = () => {
   );
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-
   return (
     <div className="homepage">
       {/* Hero Section */}
@@ -56,11 +47,11 @@ const HomePage = () => {
           Your browser does not support the video tag.
         </video>
         <div className="hero-content">
-          <h1 data-aos="fade-up">Adventure Tours for the Bold Traveler</h1>
-          <p data-aos="fade-up" data-aos-delay="100">
+          <h1>Adventure Tours for the Bold Traveler</h1>
+          <p>
             Explore curated tours and travel packages worldwide.
           </p>
-          <div className="hero-search" data-aos="fade-up" data-aos-delay="200">
+          <div className="hero-search">
             <input
               type="text"
               placeholder="Search destinations..."
@@ -72,25 +63,37 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Tours Carousel */}
-      <section className="featured-carousel py-4">
-        <div className="container">
-          {filteredTours && filteredTours.length > 0 ? (
-            <div id="featuredToursCarousel">
-              <div className="carousel-track">
-                {/* Duplicate the items for a seamless loop */}
-                {[...filteredTours.slice(0, 12), ...filteredTours.slice(0, 12)].map((tour, index) => (
-                  <div key={`${tour._id}-${index}`} className="carousel-card">
-                    <TourCard tour={tour} />
-                  </div>
-                ))}
+<section className="featured-carousel py-4">
+  <div className="container">
+    {filteredTours && filteredTours.length > 0 ? (
+      <div id="featuredToursCarousel">
+        <div className="carousel-track">
+          {[...filteredTours.slice(0, 12), ...filteredTours.slice(0, 12)].map((tour, index) => (
+            <div key={`${tour._id}-${index}`} className="carousel-card">
+              <div className="tour-card">
+                <img
+                  src={tour.image || 'https://via.placeholder.com/300x200'}
+                  alt={tour.title || 'Tour Image'}
+                  className="tour-image"
+                />
+                <div className="tour-info">
+                  <h4>{tour.title || 'Untitled Tour'}</h4>
+                  <p className="location">{tour.location || 'Unknown Location'}</p>
+                  <p className="price">
+                    {tour.price ? `$${tour.price}` : 'Price unavailable'}
+                  </p>
+                  <button className="btn-book">View Details</button>
+                </div>
               </div>
             </div>
-          ) : (
-            <p className="text-center">Loading featured tours...</p>
-          )}
+          ))}
         </div>
-      </section>      
+      </div>
+    ) : (
+      <p className="text-center">Loading featured tours...</p>
+    )}
+  </div>
+</section>
 
       <section className="services-section py-5">
   <div className="container text-center">
@@ -274,18 +277,21 @@ const HomePage = () => {
         </div>
       </section>
 
-      <button
-        onClick={scrollToTop} className="back-to-top-btn" > <FaArrowUp /> </button>
+    <button onClick={scrollToTop} className="back-to-top-btn">
+  ↑ {/* or <FaArrowUp /> if using react-icons */}
+</button>
 
-      {/* Auth Modals */}
-      <AuthModals
-        isLoginOpen={isLoginOpen}
-        isRegisterOpen={isRegisterOpen}
-        onClose={() => {
-          setIsLoginOpen(false);
-          setIsRegisterOpen(false);
-        }}
-      />
+{/* Simple Auth Modal placeholder */}
+{(isLoginOpen || isRegisterOpen) && (
+  <div className="auth-modal-overlay">
+    <div className="auth-modal">
+      <h3>{isLoginOpen ? 'Login Form' : 'Register Form'}</h3>
+      <button onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}>
+        Close
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
