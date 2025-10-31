@@ -10,14 +10,14 @@ const adminAuth = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
-    if (!user || !user.isAdmin) {
+    if (!user || user.role !== "admin") {
       return res.status(403).json({ message: "Admin access required" });
     }
 
     req.user = user;
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Invalid token" });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 

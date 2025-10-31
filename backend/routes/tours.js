@@ -1,21 +1,24 @@
 // backend/routes/tours.js
 const express = require("express");
 const router = express.Router();
-const { protect, admin } = require("../middleware/authMiddleware");
-const tourController = require("../controllers/tourController");
+const {
+  createTour,
+  getTours,
+  getTourById,
+  updateTour,
+  deleteTour,
+} = require("../controllers/tourController");
 
-// Public routes
-router.get("/", tourController.getTours);
-router.get("/:id", tourController.getTour);
-
-// Admin routes
-router.post("/", protect, admin, tourController.createTour);
-router.put("/:id", protect, admin, tourController.updateTour);
-router.delete("/:id", protect, admin, tourController.deleteTour);
-
-// Admin: cleanup route
-router.post("/cleanup", protect, admin, tourController.cleanupTours);
+// ✅ Public routes (no admin or auth restrictions)
+router.get("/", getTours);
+router.get("/:id", getTourById);
+router.post("/", createTour);
+router.put("/:id", updateTour);
+router.delete("/:id", deleteTour);
 
 module.exports = router;
+
+
+
 
 

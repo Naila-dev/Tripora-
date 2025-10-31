@@ -1,52 +1,54 @@
 // frontend/src/pages/AdminLogin.js
-import axios from "axios";
 import React, { useState } from "react";
+import API from "../api";
 import { useNavigate } from "react-router-dom";
 
-export default function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const AdminLogin = () => {
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     try {
-      const res = await axios.post("http://localhost:5000/tripora/auth/login", {
-        email,
-        password,
-      });
-      const { token, user } = res.data;
-
-      if (!user.isAdmin) {
-        return setError("Access denied. Not an admin user.");
+      const { data } = await API.post("/auth/login", form);
+      if (data.user.role !== "admin") {
+        setError("Access denied: Not an admin");
+        return;
       }
-
-      localStorage.setItem("token", token); // store JWT
-      navigate("/admin"); // Redirect to the admin dashboard
+      localStorage.setItem("token", data.token);
+      navigate("/admin");
     } catch (err) {
-      console.error("Login failed:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Login failed. Please check credentials.");
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="email" 
-        placeholder="Email" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-      />
-      <input 
-        type="password" 
-        placeholder="Password" 
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)} 
-      />
-      <button type="submit">Login</button>
-      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-    </form>
+    <div className="container py-5" style={{ maxWidth: "400px" }}>
+      <h3 className="text-center mb-4 text-success">Admin Login</h3>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          className="form-control mb-3"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          className="form-control mb-3"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+        />
+        {error && <p className="text-danger small">{error}</p>}
+        <button type="submit" className="btn btn-success w-100">
+          Login
+        </button>
+      </form>
+    </div>
   );
-}
+};
+
+export default AdminLogin;
+

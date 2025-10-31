@@ -1,83 +1,64 @@
 // backend/controllers/tourController.js
 const Tour = require("../models/Tour");
 
-// Admin: Create a tour
-exports.createTour = async (req, res) => {
+// ✅ Create a new tour
+const createTour = async (req, res) => {
   try {
-    const { title, description, price, image } = req.body;
-    const tour = await Tour.create({ title, description, price, image });
+    const tour = new Tour(req.body);
+    await tour.save();
     res.status(201).json(tour);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to create tour" });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Get all tours (public)
-exports.getTours = async (req, res) => {
+// ✅ Get all tours
+const getTours = async (req, res) => {
   try {
     const tours = await Tour.find();
     res.json(tours);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch tours" });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Get single tour (public)
-exports.getTour = async (req, res) => {
+// ✅ Get a single tour by ID
+const getTourById = async (req, res) => {
   try {
     const tour = await Tour.findById(req.params.id);
     if (!tour) return res.status(404).json({ message: "Tour not found" });
     res.json(tour);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch tour" });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Admin: Update tour
-exports.updateTour = async (req, res) => {
+// ✅ Update a tour
+const updateTour = async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!tour) return res.status(404).json({ message: "Tour not found" });
-    res.json(tour);
+    const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedTour) return res.status(404).json({ message: "Tour not found" });
+    res.json(updatedTour);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to update tour" });
+    res.status(400).json({ message: error.message });
   }
 };
 
-// Admin: Delete tour
-exports.deleteTour = async (req, res) => {
+// ✅ Delete a tour
+const deleteTour = async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndDelete(req.params.id);
-    if (!tour) return res.status(404).json({ message: "Tour not found" });
-    res.json({ message: "Tour deleted" });
+    const deletedTour = await Tour.findByIdAndDelete(req.params.id);
+    if (!deletedTour) return res.status(404).json({ message: "Tour not found" });
+    res.json({ message: "Tour deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to delete tour" });
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Admin: Delete tours not in frontend
-exports.cleanupTours = async (req, res) => {
-  try {
-    const { validIds } = req.body;
-
-    if (!Array.isArray(validIds)) {
-      return res.status(400).json({ message: "validIds must be an array" });
-    }
-
-    // Delete all tours whose IDs are not in validIds
-    const result = await Tour.deleteMany({ _id: { $nin: validIds } });
-
-    res.json({
-      message: "Old tours removed successfully",
-      deletedCount: result.deletedCount,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to clean up tours" });
-  }
+module.exports = {
+  createTour,
+  getTours,
+  getTourById,
+  updateTour,
+  deleteTour,
 };

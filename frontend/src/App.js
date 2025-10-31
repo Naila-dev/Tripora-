@@ -1,9 +1,11 @@
 // frontend/src/App.js
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "./components/AdminDashboard";  
+import AdminDashboard from "./pages/AdminDashboard";  
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import TourList from "./pages/ToursList";
+import SingleTour from "./pages/SingleTour";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contacts";
@@ -26,6 +28,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/tours/:id" element={<SingleTour />} />
+        <Route path="/tours-list" element={<TourList />} />
         <Route path="/admin-login" element={<AdminLogin />} />
       </Routes>
       <Footer />
