@@ -10,20 +10,31 @@ const About = () => {
       
 
   {/* Hero Section */}
-  <section
-    className="about-hero"
-    style={{
-      backgroundImage: `url(/images/hero2.jpeg)`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    }}
+{/* Hero Section */}
+<section className="about-hero position-relative">
+  <video
+    className="hero-video"
+    preload="none"         // lazy load
+    muted
+    loop
+    playsInline
+    poster={`${process.env.PUBLIC_URL}/images/hero2.jpeg`}  // fallback image before play
+    onMouseEnter={(e) => e.target.play()}                   // play on hover
+    onMouseLeave={(e) => e.target.pause()}                  // pause when not hovering
   >
-    <div className=""></div>
-    <div className="hero-content">
-      <h1 className="display-4 fw-bold">About Tripora</h1>
-      <p className="lead">Discover our story, mission, and the people behind your adventures</p>
-    </div>
-  </section>
+    <source src={`${process.env.PUBLIC_URL}/images/aboutherovedio.mp4`} type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div className="hero-overlay"></div>
+
+  <div className="hero-content text-center text-white position-absolute top-50 start-50 translate-middle">
+    <h1 className="display-4 fw-bold">About Tripora</h1>
+    <p className="lead">Discover our story, mission, and the people behind your adventures</p>
+  </div>
+</section>
+
+
 
   <section className="container py-5">
     <div className="row align-items-center">
@@ -40,10 +51,10 @@ const About = () => {
 
       <div className="col-md-6 text-center">
         <img
-          src="/images/view1.jpg"
+          src="/images/antelopes.jpeg"
           alt="Our Story"
           className="img-fluid rounded shadow"
-          style={{ maxHeight: "400px", objectFit: "cover" }}
+          style={{ maxHeight: "300px", objectFit: "cover" }}
         />
       </div>
     </div>

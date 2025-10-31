@@ -36,3 +36,20 @@
     transform: rotate(360deg);
   }
 }
+/* Make the root and body take full height */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Page wrapper to use flex layout */
+.page-wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content should grow */
+.main-content {
+  flex: 1;
+}

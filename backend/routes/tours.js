@@ -13,5 +13,9 @@ router.post("/", protect, admin, tourController.createTour);
 router.put("/:id", protect, admin, tourController.updateTour);
 router.delete("/:id", protect, admin, tourController.deleteTour);
 
+// Admin: cleanup route
+router.post("/cleanup", protect, admin, tourController.cleanupTours);
+
 module.exports = router;
+
 

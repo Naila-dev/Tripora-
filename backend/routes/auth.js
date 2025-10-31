@@ -4,27 +4,36 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Initialize router
 const router = express.Router();
 
-// REGISTER
+// REGISTER (with optional admin flag)
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, isAdmin } = req.body;
+
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-    // Validate phone number format (basic validation)
+    // Basic phone validation
     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: "Invalid phone number format" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword, phone });
+
+    // Explicitly set isAdmin from request or default to false
+    const user = new User({
+      name,
+      email,
+      password: hashedPassword,
+      isAdmin: !!isAdmin // converts undefined to false
+    });
+
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
     res.json({
       token,
       user: { _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin },
@@ -45,6 +54,7 @@ router.post("/login", async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
     res.json({
       token,
       user: { _id: user._id, name: user.name, email: user.email, isAdmin: user.isAdmin },

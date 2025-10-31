@@ -9,7 +9,6 @@ import {
   FaTwitter,
   FaInstagram,
 } from "react-icons/fa";
-import "./style.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import AOS from "aos";

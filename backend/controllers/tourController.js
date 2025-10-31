@@ -59,3 +59,25 @@ exports.deleteTour = async (req, res) => {
     res.status(500).json({ message: "Failed to delete tour" });
   }
 };
+
+// Admin: Delete tours not in frontend
+exports.cleanupTours = async (req, res) => {
+  try {
+    const { validIds } = req.body;
+
+    if (!Array.isArray(validIds)) {
+      return res.status(400).json({ message: "validIds must be an array" });
+    }
+
+    // Delete all tours whose IDs are not in validIds
+    const result = await Tour.deleteMany({ _id: { $nin: validIds } });
+
+    res.json({
+      message: "Old tours removed successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to clean up tours" });
+  }
+};

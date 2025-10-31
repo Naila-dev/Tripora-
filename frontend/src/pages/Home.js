@@ -46,6 +46,7 @@ const HomePage = () => {
           <source src={`${process.env.PUBLIC_URL}/images/herovideo.mp4`} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
+        <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1>Adventure Tours for the Bold Traveler</h1>
           <p>
@@ -63,13 +64,15 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Featured Tours Carousel */}
 <section className="featured-carousel py-4">
   <div className="container">
     {filteredTours && filteredTours.length > 0 ? (
-      <div id="featuredToursCarousel">
+      <div className="carousel-wrapper">
+        {/* group repeated twice for seamless loop */}
         <div className="carousel-track">
-          {[...filteredTours.slice(0, 12), ...filteredTours.slice(0, 12)].map((tour, index) => (
-            <div key={`${tour._id}-${index}`} className="carousel-card">
+          {[...filteredTours.slice(0, 12)].map((tour, i) => (
+            <article key={tour._id + '-' + i} className="carousel-card">
               <div className="tour-card">
                 <img
                   src={tour.image || 'https://via.placeholder.com/300x200'}
@@ -79,13 +82,35 @@ const HomePage = () => {
                 <div className="tour-info">
                   <h4>{tour.title || 'Untitled Tour'}</h4>
                   <p className="location">{tour.location || 'Unknown Location'}</p>
-                  <p className="price">
-                    {tour.price ? `$${tour.price}` : 'Price unavailable'}
-                  </p>
-                  <button className="btn-book">View Details</button>
+                  <p className="price">{tour.price ? `$${tour.price}` : 'Price unavailable'}</p>
+                  <div className="btn-group">
+                    <button className="btn-view">View Details</button>
+                    <button className="btn-book">Book Now</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            </article>
+          ))}
+          {[...filteredTours.slice(0, 12)].map((tour, i) => (
+            <article key={tour._id + '-dup-' + i} className="carousel-card">
+              {/* same content */}
+              <div className="tour-card">
+                <img
+                  src={tour.image || 'https://via.placeholder.com/300x200'}
+                  alt={tour.title || 'Tour Image'}
+                  className="tour-image"
+                />
+                <div className="tour-info">
+                  <h4>{tour.title || 'Untitled Tour'}</h4>
+                  <p className="location">{tour.location || 'Unknown Location'}</p>
+                  <p className="price">{tour.price ? `$${tour.price}` : 'Price unavailable'}</p>
+                  <div className="btn-group">
+                    <button className="btn-view">View Details</button>
+                    <button className="btn-book">Book Now</button>
+                  </div>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </div>
@@ -94,6 +119,8 @@ const HomePage = () => {
     )}
   </div>
 </section>
+
+{/* services section */}
 
       <section className="services-section py-5">
   <div className="container text-center">
@@ -154,7 +181,7 @@ const HomePage = () => {
 
     <div className="col-md-6 text-center">
       <img
-        src={`${process.env.PUBLIC_URL}/images/view1.jpg`}
+        src={`${process.env.PUBLIC_URL}/images/picnicdate.jpg`}
         alt="About Tripora"
         className="img-fluid rounded shadow"
         style={{ height: "400px", objectFit: "cover" }}
@@ -170,7 +197,7 @@ const HomePage = () => {
     <div className="row">
       <div className="col-md-3 col-sm-6 mb-4">
         <div className="stat-card">
-          <h3>10K+</h3>
+          <h3>1K+</h3>
           <p>Happy Travelers</p>
         </div>
       </div>
@@ -204,19 +231,19 @@ const HomePage = () => {
           <div id="testimonialCarousel" className="carousel slide" data-bs-ride="carousel">
             <div className="carousel-inner">
               <div className="carousel-item active">
-                <img src={`${process.env.PUBLIC_URL}/images/testimonial1.jpg`} alt="Traveler 1" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/testimonial1.jpeg`} alt="Traveler 1" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Tripora made my vacation seamless and unforgettable."</p>
                 <h6 className="fw-bold mt-3">— Sarah M., USA</h6>
                 <div className="stars">★★★★★</div>
               </div>
               <div className="carousel-item">
-                <img src={`${process.env.PUBLIC_URL}/images/testimonial2.jpg`} alt="Traveler 2" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/testimonial2.jpeg`} alt="Traveler 2" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Best travel company I've ever used! Professional and fun."</p>
-                <h6 className="fw-bold mt-3">— Daniel K., Kenya</h6>
+                <h6 className="fw-bold mt-3">— Daniella Kariuki, Kenya</h6>
                 <div className="stars">★★★★★</div>
               </div>
               <div className="carousel-item">
-                <img src={`${process.env.PUBLIC_URL}/images/testimonial3.jpg`} alt="Traveler 3" className="rounded-circle mb-3" width="100" height="100" />
+                <img src={`${process.env.PUBLIC_URL}/images/familia.jpeg`} alt="Traveler 3" className="rounded-circle mb-3" width="100" height="100" />
                 <p className="lead fst-italic">"Every detail was perfectly planned. Highly recommend Tripora!"</p>
                 <h6 className="fw-bold mt-3">— Amina R., Canada</h6>
                 <div className="stars">★★★★★</div>
@@ -243,7 +270,7 @@ const HomePage = () => {
           <div className="row g-4">
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Travel Tips" />
+                <img src={`${process.env.PUBLIC_URL}/images/savannah-8079856_1280.jpg`} className="img-fluid rounded-top" alt="Travel Tips" />
                 <div className="blog-content">
                   <h5>Travel Tips for Africa</h5>
                   <p>Essential advice to make your African adventures smooth and memorable.</p>
@@ -254,7 +281,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Top Destinations" />
+                <img src={`${process.env.PUBLIC_URL}/images/sailboat-9597523_1280.jpg`} className="img-fluid rounded-top" alt="Top Destinations" />
                 <div className="blog-content">
                   <h5>Top Destinations 2025</h5>
                   <p>Explore trending travel spots that should be on your bucket list this year.</p>
@@ -265,7 +292,7 @@ const HomePage = () => {
 
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src={`${process.env.PUBLIC_URL}/images/aboutp1.jpg`} className="img-fluid rounded-top" alt="Packing Essentials" />
+                <img src={`${process.env.PUBLIC_URL}/images/tourist-carrying-luggage.jpg`} className="img-fluid rounded-top" alt="Packing Essentials" />
                 <div className="blog-content">
                   <h5>Packing Essentials</h5>
                   <p>Smart packing tips to help you travel light and stress-free anywhere.</p>
