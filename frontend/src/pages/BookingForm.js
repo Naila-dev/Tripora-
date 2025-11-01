@@ -1,9 +1,8 @@
-import { useState, useContext } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+// frontend/src/pages/Booking.js
+import { useState } from 'react';
+import API from '../api'; // ✅ centralized API
 
 export default function BookingForm({ tourId }) {
-    const { token } = useContext(AuthContext);
     const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
 
@@ -11,15 +10,14 @@ export default function BookingForm({ tourId }) {
         e.preventDefault();
         try {
             // 1. Create booking in backend
-            const bookingRes = await axios.post('http://localhost:5000/api/bookings', {
-                tour: tourId
-            }, { headers: { Authorization: `Bearer ${token}` } });
+            const bookingRes = await API.post('/bookings', { tour: tourId }); // token auto-added
 
             // 2. Trigger M-Pesa payment
-            const paymentRes = await axios.post('http://localhost:5000/api/payment', {
-                amount:  bookingRes.data.tour?.price || 1000, // fallback
+            await API.post('/payments', {
+                amount: bookingRes.data.tour?.price || 1000,
                 phone
-            }, { headers: { Authorization: `Bearer ${token}` } });
+            });
+            // The paymentRes variable was unused, so we can just await the call.
 
             setMessage('Booking successful! Check your phone for M-Pesa prompt.');
         } catch (err) {

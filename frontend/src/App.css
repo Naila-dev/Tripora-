@@ -53,3 +53,5 @@ html, body, #root {
 .main-content {
   flex: 1;
 }
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";

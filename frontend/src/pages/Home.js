@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import { NavLink } from "react-router-dom";
 import api from "../api"; // Assuming api.js is in src/
+import Login from "./Login";
+import Register from "./Register";
+import "../styles/authModal.css";
 
 // Home Page Component
-const HomePage = () => {
+const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOpen }) => {
   const [tours, setTours] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   // ✅ Removed AOS to prevent reference error
   // useEffect(() => {
@@ -36,7 +40,22 @@ const HomePage = () => {
   );
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
-  return (
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 3,       // show 3 tours at once
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
+    responsive: [
+      { breakpoint: 992, settings: { slidesToShow: 2 } },
+      { breakpoint: 768, settings: { slidesToShow: 1 } },
+    ],
+  };
+
+  return ( // This should be inside HomePage
     <div className="homepage">
       {/* Hero Section */}
       <section
@@ -65,61 +84,38 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Featured Tours Carousel */}
-<section className="featured-carousel py-4">
-  <div className="container">
-    {filteredTours && filteredTours.length > 0 ? (
-      <div className="carousel-wrapper">
-        {/* group repeated twice for seamless loop */}
-        <div className="carousel-track">
-          {[...filteredTours.slice(0, 12)].map((tour, i) => (
-            <article key={tour._id + '-' + i} className="carousel-card">
-              <div className="tour-card">
-                <img
-                  src={tour.image || 'https://via.placeholder.com/300x200'}
-                  alt={tour.title || 'Tour Image'}
-                  className="tour-image"
-                />
-                <div className="tour-info">
-                  <h4>{tour.title || 'Untitled Tour'}</h4>
-                  <p className="location">{tour.location || 'Unknown Location'}</p>
-                  <p className="price">{tour.price ? `$${tour.price}` : 'Price unavailable'}</p>
-                  <div className="btn-group">
-                    <button className="btn-view">View Details</button>
-                    <button className="btn-book">Book Now</button>
+{/* Featured Tours Carousel */}
+    <section className="featured-tours py-5 bg-light">
+      <div className="container">
+        <h2 className="text-center mb-4 fw-bold text-success">Featured Tours</h2>
+        {filteredTours && filteredTours.length > 0 ? (
+          <Slider {...settings}>
+            {filteredTours.slice(0, 6).map((tour) => (
+              <div key={tour._id} className="p-3">
+                <div className="card h-100 shadow-sm">
+                  <img
+                    src={tour.image || "https://via.placeholder.com/300x200"}
+                    className="card-img-top"
+                    alt={tour.title}
+                    style={{ height: "200px", objectFit: "cover" }}
+                  />
+                  <div className="card-body text-center">
+                    <h5 className="card-title fw-bold">{tour.title}</h5>
+                    <p className="card-text text-muted">{tour.location}</p>
+                    <p className="card-text fw-bold text-success">${tour.price}</p>
+                    <NavLink to={`/tours/${tour._id}`} className="btn btn-primary btn-sm">
+                      View Details
+                    </NavLink>
                   </div>
                 </div>
               </div>
-            </article>
-          ))}
-          {[...filteredTours.slice(0, 12)].map((tour, i) => (
-            <article key={tour._id + '-dup-' + i} className="carousel-card">
-              {/* same content */}
-              <div className="tour-card">
-                <img
-                  src={tour.image || 'https://via.placeholder.com/300x200'}
-                  alt={tour.title || 'Tour Image'}
-                  className="tour-image"
-                />
-                <div className="tour-info">
-                  <h4>{tour.title || 'Untitled Tour'}</h4>
-                  <p className="location">{tour.location || 'Unknown Location'}</p>
-                  <p className="price">{tour.price ? `$${tour.price}` : 'Price unavailable'}</p>
-                  <div className="btn-group">
-                    <button className="btn-view">View Details</button>
-                    <button className="btn-book">Book Now</button>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+            ))}
+          </Slider>
+        ) : (
+          <p className="text-center">Loading featured tours...</p>
+        )}
       </div>
-    ) : (
-      <p className="text-center">Loading featured tours...</p>
-    )}
-  </div>
-</section>
+    </section>
 
 {/* services section */}
 
@@ -311,12 +307,34 @@ const HomePage = () => {
 
 {/* Simple Auth Modal placeholder */}
 {(isLoginOpen || isRegisterOpen) && (
-  <div className="auth-modal-overlay">
+  <div className="auth-modal-overlay" onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}> 
     <div className="auth-modal">
-      <h3>{isLoginOpen ? 'Login Form' : 'Register Form'}</h3>
-      <button onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}>
-        Close
-      </button>
+      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
+        <button 
+          className="auth-modal-close" 
+          onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}
+        >
+          &times;
+        </button>
+        {isLoginOpen && (
+          <Login 
+            onSwitchToRegister={() => {
+              setIsLoginOpen(false);
+              setIsRegisterOpen(true);
+            }} 
+            onSuccess={() => setIsLoginOpen(false)}
+          />
+        )}
+        {isRegisterOpen && (
+          <Register 
+            onSwitchToLogin={() => {
+              setIsRegisterOpen(false);
+              setIsLoginOpen(true);
+            }} 
+            onSuccess={() => setIsRegisterOpen(false)}
+          />
+        )}
+      </div>
     </div>
   </div>
 )}

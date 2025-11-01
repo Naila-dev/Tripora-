@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-export default function Register() {
+export default function Register({ onSwitchToLogin, onSuccess }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,6 +13,7 @@ export default function Register() {
         e.preventDefault();
         try {
             await register(name, email, password);
+            if (onSuccess) onSuccess(); // Close the modal on success
             navigate('/');
         } catch (err) {
             alert('Registration failed: ' + err.response?.data?.message);
@@ -20,13 +21,15 @@ export default function Register() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="auth-form">
             <h2>Register</h2>
-            <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
-            <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-            <button type="submit">Register</button>
+            <input className="form-control" placeholder="Name" value={name} onChange={e => setName(e.target.value)} required />
+            <input className="form-control" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required />
+            <input className="form-control" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required />
+            <button type="submit" className="btn-submit">Register</button>
+            <p className="auth-switch-text">
+                Already have an account? <button type="button" onClick={onSwitchToLogin} className="auth-switch-button">Login</button>
+            </p>
         </form>
     );
 }
-

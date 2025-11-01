@@ -1,16 +1,20 @@
 // frontend/src/api/api.js
-import axios from "axios";
+import axios from 'axios';
 
-// Create an Axios instance with base URL
+// Create a centralized Axios instance
 const API = axios.create({
-  baseURL: "http://localhost:5000/tripora", // change to your deployed backend URL later
+  baseURL: 'http://localhost:5000/tripora', // <-- base URL of your backend
 });
-// Add a request interceptor to include token in headers
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
+
+// Optional: attach token automatically to every request
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token'); // get token from localStorage
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export default API;
+
 

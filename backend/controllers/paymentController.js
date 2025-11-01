@@ -24,6 +24,7 @@ exports.stkPush = async (req, res) => {
       return res.status(400).json({ message: "Phone, amount, and booking ID are required" });
     }
 
+    // Verify booking exists
     const booking = await Booking.findById(bookingId);
     if (!booking) return res.status(404).json({ message: "Booking not found" });
 
@@ -52,11 +53,9 @@ exports.stkPush = async (req, res) => {
       TransactionDesc: "Tour booking payment",
     };
 
-    const response = await axios.post(
-      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-      payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    await axios.post("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     res.status(200).json({ message: "STK push initiated", payment, data: response.data });
   } catch (err) {

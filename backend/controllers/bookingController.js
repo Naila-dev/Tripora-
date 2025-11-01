@@ -1,3 +1,4 @@
+// backend/controllers/bookingController.js
 const Booking = require("../models/Booking");
 
 // Create a booking (user only)

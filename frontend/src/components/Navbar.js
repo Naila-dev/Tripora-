@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import "../styles/navbar.css";
 
-
-export default function Navbar() {
+export default function Navbar({ onLoginClick, onRegisterClick }) {
+  const { user, logout } = useContext(AuthContext);
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -15,16 +17,25 @@ export default function Navbar() {
         {/* Right side */}
         <div className="navbar-right">
           <div className="navbar-links">
-            <Link to="/">Home</Link>
-            <Link to="/about">About Us</Link>
-            <Link to="/tourlist">Tours</Link>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/about">About Us</NavLink>
+            <NavLink to="/tours-list">Tours</NavLink>
             {/* <Link to="/blog">Blog</Link> */}
-            <Link to="/contact">Contacts</Link>
+            <NavLink to="/contact">Contacts</NavLink>
           </div>
 
           <div className="navbar-auth">
-            <Link to="/register" className="btn btn-accent">Sign Up</Link>
-            <Link to="/login" className="btn btn-outline">Login</Link>
+            {user ? (
+              <>
+                <span className="navbar-username">Hello, {user.name}</span>
+                <button onClick={logout} className="btn btn-outline">Logout</button>
+              </>
+            ) : (
+              <>
+                <button onClick={onRegisterClick} className="btn btn-accent">Sign Up</button>
+                <button onClick={onLoginClick} className="btn btn-outline">Login</button>
+              </>
+            )}
           </div>
         </div>
       </div>

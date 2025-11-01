@@ -1,7 +1,7 @@
 // frontend/src/pages/TourForm.js
-import { useState, useContext } from 'react';
-import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+
+import { useState } from 'react';
+import API from '../api';
 
 export default function TourForm({ refreshTours }) {
     const [title, setTitle] = useState('');
@@ -9,15 +9,18 @@ export default function TourForm({ refreshTours }) {
     const [price, setPrice] = useState('');
     const [location, setLocation] = useState('');
     const [duration, setDuration] = useState('');
-    const { token } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:5000/tripora/tours', {
-            title, description, price, location, duration
-        }, { headers: { Authorization: `Bearer ${token}` } });
-        refreshTours();
-        setTitle(''); setDescription(''); setPrice(''); setLocation(''); setDuration('');
+        try {
+            await API.post('/tours', {
+                title, description, price, location, duration
+            }); // token auto-added
+            refreshTours();
+            setTitle(''); setDescription(''); setPrice(''); setLocation(''); setDuration('');
+        } catch (err) {
+            console.error(err.response?.data || err.message);
+        }
     };
 
     return (

@@ -1,3 +1,4 @@
+// frontend/src/components/TourCard.js
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -15,8 +16,11 @@ const TourCard = ({ tour }) => {
           <h5 className="fw-bold">{tour.title}</h5>
           <p className="text-muted">{tour.location}</p>
           <p className="fw-bold text-success">${tour.price}</p>
-          <Link to={`/TourDetails/${tour._id}`} className="btn btn-outline-success btn-sm">
+          <Link to={`/tours/${tour._id}`} className="btn btn-outline-success btn-sm">
             View Details
+          </Link>
+          <Link to={`/booking?tourId=${tour._id}`} className="btn btn-success btn-sm ms-2">
+            Book Now
           </Link>
         </div>
       </div>
