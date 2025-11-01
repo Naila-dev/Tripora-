@@ -15,7 +15,9 @@ const paymentRoutes = require('./routes/payments');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000' // Allow requests from your React frontend
+}));
 app.use(express.json());
 
 // Serve static files from the 'uploads' directory
@@ -34,10 +36,7 @@ app.use('/tripora/bookings', bookingRoutes);
 app.use('/tripora/payments', paymentRoutes);
 
 // DB connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.error(err));
 

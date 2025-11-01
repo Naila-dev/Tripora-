@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://unpraised-dale-unappetizingly.ngrok-free.dev/tripora"
+  baseURL: "http://localhost:5000/tripora", // ✅ Adjust if your backend URL is different
 });
 
 // 🧠 Automatically attach token from localStorage for every request

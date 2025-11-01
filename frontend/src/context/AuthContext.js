@@ -2,8 +2,6 @@
 import { createContext, useState, useEffect } from 'react';
 import API from '../api';
 
-import axios from 'axios';
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -48,9 +46,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     // Register function
-    const register = async (name, email, password) => {
+    const register = async (name, email, password, phone) => {
         try {
-            const res = await API.post('/auth/register', { name, email, password });
+            const res = await API.post('/auth/register', { name, email, password, phone });
 
             if (res.data && res.data.user && res.data.token) {
                 setUser(res.data.user);

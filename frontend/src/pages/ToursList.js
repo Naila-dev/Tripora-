@@ -20,12 +20,16 @@ export default function TourList() {
 
     return (
         <div className="container py-5">
-            <h2 className="text-center mb-4">All Tours</h2>
+            <h2 className="text-center mb-5 fw-bold text-success">All Our Tours</h2>
             <div className="row">
                 {tours.length === 0 ? (
                     <p className="text-center">No tours available.</p>
                 ) : (
-                    tours.map(tour => <TourCard key={tour._id} tour={tour} />)
+                    tours.map(tour => (
+                        <div key={tour._id} className="col-lg-4 col-md-6 mb-4">
+                            <TourCard tour={tour} />
+                        </div>
+                    ))
                 )}
             </div>
         </div>
