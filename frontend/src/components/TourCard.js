@@ -15,7 +15,7 @@ const TourCard = ({ tour }) => {
         <div className="card-body">
           <h5 className="fw-bold">{tour.title}</h5>
           <p className="text-muted">{tour.location}</p>
-          <p className="fw-bold text-success">${tour.price}</p>
+          <p className="fw-bold text-success">Ksh {tour.price}</p>
           <Link to={`/tours/${tour._id}`} className="btn btn-outline-success btn-sm">
             View Details
           </Link>

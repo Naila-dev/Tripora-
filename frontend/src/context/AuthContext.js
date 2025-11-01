@@ -4,14 +4,27 @@ import API from '../api';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
+    const [user, setUser] = useState(() => {
+        try {
+            const savedUser = localStorage.getItem('user');
+            return savedUser ? JSON.parse(savedUser) : null;
+        } catch (error) {
+            console.error("Failed to parse user from localStorage", error);
+            return null;
+        }
+    });
+    const [token, setToken] = useState(() => localStorage.getItem('token') || null);
 
     // Save token to localStorage whenever it changes
     useEffect(() => {
         if (token) localStorage.setItem('token', token);
         else localStorage.removeItem('token');
     }, [token]);
+
+    useEffect(() => {
+        if (user) localStorage.setItem('user', JSON.stringify(user));
+        else localStorage.removeItem('user');
+    }, [user]);
 
     // Login function
     const login = async (email, password) => {
@@ -21,11 +34,12 @@ export const AuthProvider = ({ children }) => {
             if (res.data && res.data.user && res.data.token) {
                 setUser(res.data.user);
                 setToken(res.data.token);
+                localStorage.setItem('refreshToken', res.data.refreshToken);
             } else {
                 console.error('Login response invalid:', res.data);
             }
         } catch (err) {
-            console.error('Login error:', err.response?.data || err.message);
+            throw err;
         }
     };
 
@@ -37,11 +51,12 @@ export const AuthProvider = ({ children }) => {
             if (res.data && res.data.user && res.data.token) {
                 setUser(res.data.user);
                 setToken(res.data.token);
+                localStorage.setItem('refreshToken', res.data.refreshToken);
             } else {
                 console.error('Register response invalid:', res.data);
             }
         } catch (err) {
-            console.error('Register error:', err.response?.data || err.message);
+            throw err;
         }
     };
 
@@ -49,6 +64,9 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         setToken(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('refreshToken');
     };
 
     return (

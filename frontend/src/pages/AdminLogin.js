@@ -1,12 +1,21 @@
 // frontend/src/pages/AdminLogin.js
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const AdminLogin = () => {
+  const { user } = useContext(AuthContext);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // If the user is already logged in and is an admin, redirect to the dashboard
+    if (user && user.role === 'admin') {
+      navigate('/admin');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,4 +60,3 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
-

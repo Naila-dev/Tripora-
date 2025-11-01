@@ -44,7 +44,7 @@ export default function TourDetails() {
                             <hr />
                             <p><strong>Location:</strong> {tour.location}</p>
                             <p><strong>Duration:</strong> {tour.duration}</p>
-                            <h3 className="fw-bold text-success my-3">Price: ${tour.price}</h3>
+                            <h3 className="fw-bold text-success my-3">Price: Ksh {tour.price}</h3>
                             <hr />
                             {token ? (
                                 <BookingForm tourId={tour._id} />

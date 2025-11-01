@@ -102,7 +102,7 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
                   <div className="card-body text-center">
                     <h5 className="card-title fw-bold">{tour.title}</h5>
                     <p className="card-text text-muted">{tour.location}</p>
-                    <p className="card-text fw-bold text-success">${tour.price}</p>
+                    <p className="card-text fw-bold text-success">Ksh {tour.price}</p>
                     <NavLink to={`/tours/${tour._id}`} className="btn btn-primary btn-sm">
                       View Details
                     </NavLink>

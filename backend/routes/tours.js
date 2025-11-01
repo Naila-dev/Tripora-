@@ -3,12 +3,30 @@ const express = require('express');
 const Tour = require('../models/Tour');
 const protect = require('../middleware/authMiddleware');
 const admin = require('../middleware/adminMiddleware');
+const multer = require('multer');
 const router = express.Router();
 
+// Configure multer for file storage
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const upload = multer({ storage: storage });
+
 // Create tour
-router.post('/', protect, admin, async (req, res) => {
+router.post('/', protect, admin, upload.single('image'), async (req, res) => {
     try {
-        const tour = await Tour.create(req.body);
+        const tourData = { ...req.body };
+        if (req.file) {
+            // Prepend server base URL to the path
+            tourData.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        }
+        const tour = await Tour.create(tourData);
         res.status(201).json(tour);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -37,9 +55,14 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update tour
-router.put('/:id', protect, admin, async (req, res) => {
+router.put('/:id', protect, admin, upload.single('image'), async (req, res) => {
     try {
-        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updateData = { ...req.body };
+        if (req.file) {
+            // Prepend server base URL to the path
+            updateData.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+        }
+        const tour = await Tour.findByIdAndUpdate(req.params.id, updateData, { new: true });
         res.json(tour);
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -57,9 +80,3 @@ router.delete('/:id', protect, admin, async (req, res) => {
 });
 
 module.exports = router;
-
-
-
-
-
-

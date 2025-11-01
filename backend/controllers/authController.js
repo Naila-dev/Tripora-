@@ -3,9 +3,14 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 // 🔐 Helper: Generate a JWT
-const generateToken = (id, role) => {
-  return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+const generateAccessToken = (user) => {
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '15m' });
 };
+
+const generateRefreshToken = (user) => {
+  return jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+};
+
 
 // 🧾 Register User
 exports.registerUser = async (req, res) => {
@@ -27,11 +32,15 @@ exports.registerUser = async (req, res) => {
       role: role || "user",
     });
 
-    // Generate token
-    const token = generateToken(user._id, user.role);
+    // Generate tokens
+    const token = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
     res.status(201).json({
-      message: "User registered successfully",
+      message: "User registered successfully", 
       token, // ✅ Include JWT token
       user: {
         id: user._id,
@@ -40,6 +49,7 @@ exports.registerUser = async (req, res) => {
         phone: user.phone,
         role: user.role,
       },
+      refreshToken
     });
   } catch (error) {
     res.status(500).json({
@@ -62,11 +72,15 @@ exports.loginUser = async (req, res) => {
     const isMatch = await user.matchPassword(password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // Generate token
-    const token = generateToken(user._id, user.role);
+    // Generate tokens
+    const token = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    user.refreshToken = refreshToken;
+    await user.save();
 
     res.json({
-      message: "Login successful",
+      message: "Login successful", 
       token, // ✅ Include JWT token
       user: {
         id: user._id,
@@ -75,6 +89,7 @@ exports.loginUser = async (req, res) => {
         phone: user.phone,
         role: user.role,
       },
+      refreshToken
     });
   } catch (error) {
     res.status(500).json({
@@ -84,3 +99,38 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+// 🔄 Refresh Token
+exports.refreshToken = async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) return res.status(401).json({ message: 'No refresh token provided' });
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+
+    // Check if the token from the request matches the one in the DB
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    const newAccessToken = generateAccessToken(user);
+    return res.json({ token: newAccessToken });
+
+  } catch (err) {
+    return res.status(403).json({ message: 'Refresh token invalid or expired' });
+  }
+};
+
+// 🚪 Logout User
+exports.logoutUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (user) {
+      user.refreshToken = undefined; // or null
+      await user.save();
+    }
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error during logout' });
+  }
+};
