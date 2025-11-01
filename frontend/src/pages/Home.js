@@ -206,7 +206,7 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
       </div>
       <div className="col-md-3 col-sm-6 mb-4">
         <div className="stat-card">
-          <h3>11/2+</h3>
+          <h3>2+</h3>
           <p>Years of Experience</p>
         </div>
       </div>
@@ -271,7 +271,7 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
                 <div className="blog-content">
                   <h5>Travel Tips for Africa</h5>
                   <p>Essential advice to make your African adventures smooth and memorable.</p>
-                  <NavLink to="/blog" className="btn btn-primary btn-sm">Read More</NavLink>
+                  <NavLink to="/" className="btn btn-primary btn-sm">Read More</NavLink>
                 </div>
               </div>
             </div>
@@ -282,7 +282,7 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
                 <div className="blog-content">
                   <h5>Top Destinations 2025</h5>
                   <p>Explore trending travel spots that should be on your bucket list this year.</p>
-                  <NavLink to="/blog" className="btn btn-primary btn-sm">Read More</NavLink>
+                  <NavLink to="/" className="btn btn-primary btn-sm">Read More</NavLink>
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
                 <div className="blog-content">
                   <h5>Packing Essentials</h5>
                   <p>Smart packing tips to help you travel light and stress-free anywhere.</p>
-                  <NavLink to="/blog" className="btn btn-primary btn-sm">Read More</NavLink>
+                  <NavLink to="/" className="btn btn-primary btn-sm">Read More</NavLink>
                 </div>
               </div>
             </div>

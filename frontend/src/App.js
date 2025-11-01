@@ -10,6 +10,7 @@ import TourDetails from "./pages/TourDetails";
 import TourCard from "./components/TourCard";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import BlogPage from "./pages/Blog";
 import Contact from "./pages/Contacts";
 // import Tours from "./pages/Tours";
 import Booking from "./pages/BookingForm";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         {/* <Route path="/tours" element={<Tours />} /> */}
+        <Route path="/blog" element={<BlogPage />} />
         <Route path="/booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
