@@ -11,6 +11,7 @@ const tourRoutes = require('./routes/tours');
 const bookingRoutes = require('./routes/bookings');
 const paymentRoutes = require('./routes/payments');
 
+
 const app = express();
 
 // Middleware

@@ -1,5 +1,8 @@
+// frontend/src/context/AuthContext.js
 import { createContext, useState, useEffect } from 'react';
 import API from '../api';
+
+import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -38,6 +41,7 @@ export const AuthProvider = ({ children }) => {
             } else {
                 console.error('Login response invalid:', res.data);
             }
+            return res; // <-- ADD THIS LINE
         } catch (err) {
             throw err;
         }
@@ -55,6 +59,7 @@ export const AuthProvider = ({ children }) => {
             } else {
                 console.error('Register response invalid:', res.data);
             }
+            return res; // <-- ADD THIS LINE
         } catch (err) {
             throw err;
         }

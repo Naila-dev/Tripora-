@@ -10,7 +10,7 @@ export default function BookingForm({ tourId }) {
         e.preventDefault();
         try {
             // 1. Create booking in backend
-            const bookingRes = await API.post('/bookings', { tour: tourId }); // token auto-added
+            const bookingRes = await API.post('/bookings', { tourId }); // token auto-added
 
             // 2. Trigger M-Pesa payment
             await API.post('/payments', {

@@ -1,50 +1,53 @@
-// frontend/src/api/api.js
-import axios from 'axios';
+// frontend/src/api.js
+import axios from "axios";
 
-// Create a centralized Axios instance
 const API = axios.create({
-  baseURL: 'http://localhost:5000/tripora', // <-- base URL of your backend
+  baseURL: "http://localhost:5000/tripora", // ✅ Adjust if your backend URL is different
 });
 
-// Optional: attach token automatically to every request
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token'); // get token from localStorage
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// 🧠 Automatically attach token from localStorage for every request
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
+// 🧩 Automatically refresh token if expired
 API.interceptors.response.use(
-  (res) => res,
+  response => response,
   async (error) => {
     const originalRequest = error.config;
+
     // Check for 401 and that it's not a retry request
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+      originalRequest._retry = true; // Mark as a retry
       const refreshToken = localStorage.getItem('refreshToken');
 
       if (!refreshToken) {
-        // Handle case where there is no refresh token
+        // No refresh token available, log out the user
+        localStorage.clear();
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
       try {
-        // Use a temporary axios instance for the refresh request to avoid interceptor recursion
-        const { data } = await axios.post('http://localhost:5000/tripora/auth/refresh', { refreshToken });
-        localStorage.setItem('token', data.token);
-        // Update the header for the original request and future requests
-        API.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
-        originalRequest.headers['Authorization'] = `Bearer ${data.token}`;
-        return API(originalRequest);
+        const { data } = await axios.post("http://localhost:5000/tripora/auth/refresh", { refreshToken });
+        localStorage.setItem("token", data.token);
+        originalRequest.headers["Authorization"] = `Bearer ${data.token}`;
+        return API(originalRequest); // Retry the original request with the new token
       } catch (refreshErr) {
-        // Refresh failed, clear tokens and redirect
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/login'; // Or show a login modal
+        // Refresh failed, clear storage and redirect to login
+        localStorage.clear();
+        window.location.href = '/login';
         return Promise.reject(refreshErr);
       }
     }
+
     return Promise.reject(error);
   }
 );

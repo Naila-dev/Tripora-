@@ -6,7 +6,7 @@ exports.createBooking = async (req, res) => {
   try {
     const { tourId } = req.body;
     const booking = new Booking({
-      user: req.user.id, // user id from auth middleware
+      user: req.user._id, // user id from auth middleware
       tour: tourId
     });
 

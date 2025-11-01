@@ -1,11 +1,10 @@
 // frontend/src/pages/AdminLogin.js
 import React, { useState, useContext, useEffect } from "react";
-import API from "../api";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const AdminLogin = () => {
-  const { user } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -20,13 +19,14 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await API.post("/auth/login", form);
-      if (data.user.role !== "admin") {
+      const res = await login(form.email, form.password);
+      // After login, the user object in context is updated. We check that.
+      if (res.data.user.role !== "admin") {
         setError("Access denied: Not an admin");
+        // Note: You might want to log the user out here if they are not an admin.
         return;
       }
-      localStorage.setItem("token", data.token);
-      navigate("/admin");
+      navigate("/admin"); // Redirect on successful admin login
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
