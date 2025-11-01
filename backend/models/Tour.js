@@ -1,15 +1,14 @@
 // backend/models/Tour.js
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const tourSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  location: { type: String, required: true },
-  price: { type: Number, required: true },
-  duration: { type: String, required: true },
-  image: { type: String }, // local/public path or URL
-  createdAt: { type: Date, default: Date.now },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    location: { type: String, required: true },
+    price: { type: Number, required: true },
+    duration: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Tour", tourSchema);
+module.exports = mongoose.model('Tour', tourSchema);

@@ -42,10 +42,11 @@ const HomePage = () => {
       <section
         className="hero"
       >
-        <video autoPlay loop muted playsInline className="hero-video">
-          <source src={`${process.env.PUBLIC_URL}/images/herovideo.mp4`} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+  <img
+    src={`${process.env.PUBLIC_URL}/images/hero1.jpeg`}
+    alt="Hero"
+    className="hero-image"
+  />
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <h1>Adventure Tours for the Bold Traveler</h1>
@@ -270,7 +271,7 @@ const HomePage = () => {
           <div className="row g-4">
             <div className="col-md-4 col-sm-6">
               <div className="blog-card">
-                <img src={`${process.env.PUBLIC_URL}/images/savannah-8079856_1280.jpg`} className="img-fluid rounded-top" alt="Travel Tips" />
+                <img src={`${process.env.PUBLIC_URL}/images/migration.jpeg`} className="img-fluid rounded-top" alt="Travel Tips" />
                 <div className="blog-content">
                   <h5>Travel Tips for Africa</h5>
                   <p>Essential advice to make your African adventures smooth and memorable.</p>

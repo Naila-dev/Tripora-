@@ -3,6 +3,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import { NavLink } from "react-router-dom";
+import "../styles/about.css";
 
 const About = () => {
   return (
@@ -14,15 +15,14 @@ const About = () => {
 <section className="about-hero position-relative">
   <video
     className="hero-video"
-    preload="none"         // lazy load
-    muted
+    autoPlay
     loop
+    muted
     playsInline
-    poster={`${process.env.PUBLIC_URL}/images/hero2.jpeg`}  // fallback image before play
-    onMouseEnter={(e) => e.target.play()}                   // play on hover
-    onMouseLeave={(e) => e.target.pause()}                  // pause when not hovering
+    preload="auto"
+    // poster={`${process.env.PUBLIC_URL}/images/hero2.jpeg`}  // fallback image before play
   >
-    <source src={`${process.env.PUBLIC_URL}/images/aboutherovedio.mp4`} type="video/mp4" />
+    <source src={`${process.env.PUBLIC_URL}/images/herovedio.mp4`} type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
@@ -30,7 +30,7 @@ const About = () => {
 
   <div className="hero-content text-center text-white position-absolute top-50 start-50 translate-middle">
     <h1 className="display-4 fw-bold">About Tripora</h1>
-    <p className="lead">Discover our story, mission, and the people behind your adventures</p>
+    <p className="lead fonts-text text-black" >Discover our story, mission, and the people behind your adventures</p>
   </div>
 </section>
 
@@ -152,7 +152,7 @@ const About = () => {
                   alt="Tour Guide"
                   className="team-member-img mb-3"
                 />
-                <h5 className="fw-bold">John wasike</h5>
+                <h5 className="fw-bold">Feliciah Felicity</h5>
                 <p className="text-muted mb-1">Lead Tour Guide</p>
  <p className="small text-secondary">
                   Ensures seamless logistics and outstanding service to keep every
@@ -214,7 +214,7 @@ const About = () => {
       {/* Call to Action */}
       <section className="text-center py-5 bg-primary text-black">
         <h3>Ready to start your next adventure?</h3>
-        <NavLink to="/tours" className="btn btn-light text-black btn-lg mt-3">Explore Tours</NavLink>
+        <NavLink to="/TourList" className="btn btn-light text-black btn-lg mt-3">Explore Tours</NavLink>
       </section>
 
     </div>

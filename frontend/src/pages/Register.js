@@ -1,81 +1,32 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Alert } from "react-bootstrap";
-import { useAuth } from "../context/AuthContext"; // add this
-import api from "../api"; // add this (ensure api.js exists)
+import { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
-function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
-  const [error, setError] = useState(null);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+export default function Register() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { register } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await register(name, email, password);
+            navigate('/');
+        } catch (err) {
+            alert('Registration failed: ' + err.response?.data?.message);
+        }
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await api.post("/auth/register", form);
-      login(data.user, data.token);
-      navigate("/");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    }
-  };
-
-  return (
-    <Container className="mt-5">
-      <h2>Register</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group className="mb-3">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            name="name"
-            placeholder="Enter your name"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-            name="phone"
-            placeholder="Enter your phone number"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Register
-        </Button>
-      </Form>
-    </Container>
-  );
+    return (
+        <form onSubmit={handleSubmit}>
+            <h2>Register</h2>
+            <input placeholder="Name" value={name} onChange={e => setName(e.target.value)} />
+            <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+            <button type="submit">Register</button>
+        </form>
+    );
 }
 
-export default Register;

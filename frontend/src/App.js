@@ -5,11 +5,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import TourList from "./pages/ToursList";
-import SingleTour from "./pages/SingleTour";
+import SingleTour from "./pages/TourForm";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contacts";
-import Tours from "./pages/Tours";
+// import Tours from "./pages/Tours";
 import Booking from "./pages/Booking";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/tours" element={<Tours />} />
+        {/* <Route path="/tours" element={<Tours />} /> */}
         <Route path="/booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

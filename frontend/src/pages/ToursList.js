@@ -1,35 +1,33 @@
 // frontend/src/pages/ToursList.js
-import React, { useEffect, useState } from "react";
-import API from "../api";
-import TourCard from "../components/TourCard";
+import { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
 
-const ToursList = () => {
-  const [tours, setTours] = useState([]);
+export default function TourList() {
+    const [tours, setTours] = useState([]);
+    const { token } = useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchTours = async () => {
-      try {
-        const { data } = await API.get("/tours");
-        setTours(data);
-      } catch (error) {
-        console.error("Error loading tours:", error);
-      }
-    };
-    fetchTours();
-  }, []);
+    useEffect(() => {
+        const fetchTours = async () => {
+            const res = await axios.get('http://localhost:5000/tripora/tours', {
+                headers: token ? { Authorization: `Bearer ${token}` } : {}
+            });
+            setTours(res.data);
+        };
+        fetchTours();
+    }, [token]);
 
-  return (
-    <section className="container py-5">
-      <h2 className="fw-bold text-center mb-5 text-success">Explore Our Tours</h2>
-      <div className="row">
-        {tours.length > 0 ? (
-          tours.map((tour) => <TourCard key={tour._id} tour={tour} />)
-        ) : (
-          <p className="text-center text-muted">No tours available</p>
-        )}
-      </div>
-    </section>
-  );
-};
-
-export default ToursList;
+    
+    return (
+        <div>
+            <h2>Tours</h2>
+            {tours.map(t => (
+                <div key={t._id}>
+                    <h3>{t.title}</h3>
+                    <p>{t.description}</p>
+                    <p>Price: KES{t.price}</p>
+                </div>
+            ))}
+        </div>
+    );
+}
