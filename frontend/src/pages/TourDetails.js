@@ -1,12 +1,11 @@
 // frontend/src/pages/TourDetails.js
 import { useState, useEffect, useContext } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import API from '../api'; // centralized API
 import { AuthContext } from '../context/AuthContext';
-import BookingForm from './BookingForm'; // corrected import
 
-export default function TourDetails() {
+export default function TourDetails({ onBookNowClick }) {
     const { id } = useParams();
     const [tour, setTour] = useState(null);
     const { token } = useContext(AuthContext);
@@ -26,33 +25,38 @@ export default function TourDetails() {
     if (!tour) return <p>Loading...</p>;
 
     return (
-        <div className="container py-5">
-            <div className="row">
-                <div className="col-md-8">
-                    <img 
-                        src={tour.image || 'https://via.placeholder.com/800x500'} 
-                        alt={tour.title} 
-                        className="img-fluid rounded shadow-lg mb-4"
-                    />
-                    <h1 className="fw-bold mb-3">{tour.title}</h1>
-                    <p className="lead text-muted">{tour.description}</p>
+        <div className="tour-details-page">
+            {/* Hero Image Section */}
+            <section className="tour-hero" style={{ backgroundImage: `url(${tour.image || 'https://via.placeholder.com/1200x500'})` }}>
+                <div className="hero-overlay"></div>
+                <div className="hero-content text-white text-center">
+                    <h1 className="display-4 fw-bold">{tour.title}</h1>
+                    <p className="lead">{tour.location}</p>
                 </div>
-                <div className="col-md-4">
-                    <div className="card shadow-sm">
-                        <div className="card-body">
-                            <h4 className="card-title fw-bold">Tour Details</h4>
-                            <hr />
-                            <p><strong>Location:</strong> {tour.location}</p>
-                            <p><strong>Duration:</strong> {tour.duration}</p>
-                            <h3 className="fw-bold text-success my-3">Price: Ksh {tour.price}</h3>
-                            <hr />
-                            {token ? (
-                                <BookingForm tourId={tour._id} />
-                            ) : (
-                                <div className="alert alert-warning">
-                                    Please <Link to="/login">log in</Link> to book this tour.
-                                </div>
-                            )}
+            </section>
+
+            {/* Main Content */}
+            <div className="container py-5">
+                <div className="row">
+                    <div className="col-lg-8">
+                        <h2 className="fw-bold mb-3">About the Tour</h2>
+                        <p className="text-muted">{tour.description}</p>
+                        {/* You can add more sections here like Itinerary, Highlights, etc. */}
+                    </div>
+                    <div className="col-lg-4">
+                        <div className="booking-card card shadow-lg p-3 position-sticky" style={{ top: '100px' }}>
+                            <div className="card-body text-center">
+                                <h3 className="fw-bold text-success mb-3">Ksh {tour.price}</h3>
+                                <p className="text-muted">per person</p>
+                                <button 
+                                    className="btn btn-primary btn-lg w-100" 
+                                    onClick={() => onBookNowClick(tour)}
+                                >
+                                    Book Now
+                                </button>
+                                <hr className="my-4" />
+                                <p className="small"><strong>Duration:</strong> {tour.duration}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

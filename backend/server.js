@@ -21,6 +21,12 @@ app.use(express.json());
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Simple test route for /tripora
+app.get('/tripora', (req, res) => {
+    res.send('✅ Tripora API is running!');
+});
+
+
 // Routes
 app.use('/tripora/auth', authRoutes);
 app.use('/tripora/tours', tourRoutes);

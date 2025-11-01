@@ -27,7 +27,8 @@ const Footer = () => {
             <ul className="footer-links list-unstyled">
               <li><NavLink to="/">Home</NavLink></li>
               <li><NavLink to="/about">About</NavLink></li>
-              <li><NavLink to="/tours">Tours</NavLink></li>
+              {/* <li><NavLink to="/tours">Tours</NavLink></li> */}
+              <NavLink to="/tours-list">Tours</NavLink>
               {/* <li><NavLink to="/blog">Blog</NavLink></li> */}
               <li><NavLink to="/contact">Contact</NavLink></li>
             </ul>

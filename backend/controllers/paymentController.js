@@ -2,16 +2,19 @@
 const axios = require("axios");
 const Booking = require("../models/Booking");
 const Payment = require("../models/Payment");
-
 require("dotenv").config();
 
-// Helper: M-Pesa access token
+// Helper: Get M-Pesa access token dynamically
 const getAccessToken = async () => {
-  const auth = Buffer.from(`${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`).toString("base64");
+  const auth = Buffer.from(
+    `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
+  ).toString("base64");
+
   const response = await axios.get(
     "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials",
     { headers: { Authorization: `Basic ${auth}` } }
   );
+
   return response.data.access_token;
 };
 
@@ -28,16 +31,18 @@ exports.stkPush = async (req, res) => {
     const booking = await Booking.findById(bookingId);
     if (!booking) return res.status(404).json({ message: "Booking not found" });
 
-    // Create a Payment record
+    // Create payment record
     const payment = await Payment.create({
       booking: bookingId,
       amount,
-      status: "processing"
+      status: "processing",
     });
 
     const token = await getAccessToken();
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "").slice(0, 14);
-    const password = Buffer.from(`${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`).toString("base64");
+    const password = Buffer.from(
+      `${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`
+    ).toString("base64");
 
     const payload = {
       BusinessShortCode: process.env.MPESA_SHORTCODE,
@@ -53,9 +58,11 @@ exports.stkPush = async (req, res) => {
       TransactionDesc: "Tour booking payment",
     };
 
-    await axios.post("https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest", payload, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.post(
+      "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
     res.status(200).json({ message: "STK push initiated", payment, data: response.data });
   } catch (err) {
@@ -70,7 +77,8 @@ exports.mpesaCallback = async (req, res) => {
     const callback = req.body.Body.stkCallback;
     const { MerchantRequestID, ResultCode, ResultDesc, CallbackMetadata } = callback;
 
-    const payment = await Payment.findOne({ _id: MerchantRequestID }); // or map MerchantRequestID -> Payment record
+    // Find payment using MerchantRequestID
+    const payment = await Payment.findOne({ _id: MerchantRequestID }); // You may want to store MerchantRequestID when creating payment
     if (!payment) return res.status(404).send();
 
     if (ResultCode === 0) {
@@ -78,7 +86,7 @@ exports.mpesaCallback = async (req, res) => {
       payment.paidAt = new Date();
       await payment.save();
 
-      // Update booking
+      // Update booking status
       await Booking.findByIdAndUpdate(payment.booking, { paymentStatus: "completed" });
     } else {
       payment.status = "failed";
@@ -95,7 +103,7 @@ exports.mpesaCallback = async (req, res) => {
   }
 };
 
-// Payment status
+// Get payment status
 exports.getStatus = async (req, res) => {
   try {
     const payment = await Payment.findOne({ booking: req.params.bookingId });

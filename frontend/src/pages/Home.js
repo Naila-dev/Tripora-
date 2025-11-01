@@ -6,12 +6,9 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { NavLink } from "react-router-dom";
 import api from "../api"; // Assuming api.js is in src/
-import Login from "./Login";
-import Register from "./Register";
-import "../styles/authModal.css";
 
 // Home Page Component
-const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOpen }) => {
+const HomePage = () => {
   const [tours, setTours] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -305,39 +302,6 @@ const HomePage = ({ isLoginOpen, setIsLoginOpen, isRegisterOpen, setIsRegisterOp
   ↑ {/* or <FaArrowUp /> if using react-icons */}
 </button>
 
-{/* Simple Auth Modal placeholder */}
-{(isLoginOpen || isRegisterOpen) && (
-  <div className="auth-modal-overlay" onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}> 
-    <div className="auth-modal">
-      <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
-        <button 
-          className="auth-modal-close" 
-          onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}
-        >
-          &times;
-        </button>
-        {isLoginOpen && (
-          <Login 
-            onSwitchToRegister={() => {
-              setIsLoginOpen(false);
-              setIsRegisterOpen(true);
-            }} 
-            onSuccess={() => setIsLoginOpen(false)}
-          />
-        )}
-        {isRegisterOpen && (
-          <Register 
-            onSwitchToLogin={() => {
-              setIsRegisterOpen(false);
-              setIsLoginOpen(true);
-            }} 
-            onSuccess={() => setIsRegisterOpen(false)}
-          />
-        )}
-      </div>
-    </div>
-  </div>
-)}
     </div>
   );
 };
