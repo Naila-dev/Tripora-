@@ -63,17 +63,24 @@ exports.registerUser = async (req, res) => {
 // 🔑 Login User
 exports.loginUser = async (req, res) => {
   try {
+    console.log("1. Admin login request received.");
     const { email, password } = req.body;
 
     // Find user by email
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    if (!user) {
+      console.log("Login failed: User not found.");
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    console.log("2. User found in database:", user.email, "Role:", user.role);
 
     // Check password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    console.log("3. Password matches.");
 
     // Generate tokens
+    console.log("4. Generating tokens. JWT_SECRET:", process.env.JWT_SECRET ? "Loaded" : "MISSING!");
     const token = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
@@ -81,6 +88,7 @@ exports.loginUser = async (req, res) => {
     await user.save();
 
     res.json({
+      
       message: "Login successful", 
       token, // ✅ Include JWT token
       user: {
@@ -93,6 +101,7 @@ exports.loginUser = async (req, res) => {
       refreshToken
     });
   } catch (error) {
+    console.error("❌ 5. ERROR during login:", error);
     res.status(500).json({
       message: "Login failed",
       error: error.message,

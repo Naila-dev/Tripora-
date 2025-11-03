@@ -53,7 +53,7 @@ function App() {
         <Route path="/tour-card" element={<TourCard />} />
         <Route path="/tours-list" element={<TourList />} />
         <Route path="/tour-form" element={<TourForm />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/login/admin" element={<AdminLogin />} />
       </Routes>
       <Footer />
 

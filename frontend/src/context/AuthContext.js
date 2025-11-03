@@ -5,75 +5,55 @@ import API from '../api';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        try {
-            const savedUser = localStorage.getItem('user');
-            return savedUser ? JSON.parse(savedUser) : null;
-        } catch (error) {
-            console.error("Failed to parse user from localStorage", error);
-            return null;
-        }
-    });
-    const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token'));
 
-    // Save token to localStorage whenever it changes
     useEffect(() => {
-        if (token) localStorage.setItem('token', token);
-        else localStorage.removeItem('token');
+        const fetchUser = async () => {
+            if (token) {
+                API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                try {
+                    const res = await API.get('/auth/me'); // An endpoint to get current user
+                    setUser(res.data);
+                } catch (err) {
+                    console.error('Failed to fetch user', err);
+                    setToken(null);
+                    localStorage.removeItem('token');
+                }
+            }
+        };
+        fetchUser();
     }, [token]);
 
-    useEffect(() => {
-        if (user) localStorage.setItem('user', JSON.stringify(user));
-        else localStorage.removeItem('user');
-    }, [user]);
-
-    // Login function
     const login = async (email, password) => {
-        try {
-            const res = await API.post('/auth/login', { email, password });
-
-            if (res.data && res.data.user && res.data.token) {
-                setUser(res.data.user);
-                setToken(res.data.token);
-                localStorage.setItem('refreshToken', res.data.refreshToken);
-            } else {
-                console.error('Login response invalid:', res.data);
-            }
-            return res; // <-- ADD THIS LINE
-        } catch (err) {
-            throw err;
-        }
+        const res = await API.post('/auth/login', { email, password });
+        const { token: apiToken, user: apiUser } = res.data;
+        setToken(apiToken);
+        setUser(apiUser);
+        localStorage.setItem('token', apiToken);
+        API.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
+        return res; // Return response for admin login check
     };
 
-    // Register function
-    const register = async (name, email, password, phone) => {
-        try {
-            const res = await API.post('/auth/register', { name, email, password, phone });
-
-            if (res.data && res.data.user && res.data.token) {
-                setUser(res.data.user);
-                setToken(res.data.token);
-                localStorage.setItem('refreshToken', res.data.refreshToken);
-            } else {
-                console.error('Register response invalid:', res.data);
-            }
-            return res; // <-- ADD THIS LINE
-        } catch (err) {
-            throw err;
-        }
+    const register = async (userData) => {
+        // userData is an object like { name, email, password, phone }
+        const res = await API.post('/auth/register', userData);
+        const { token: apiToken, user: apiUser } = res.data;
+        setToken(apiToken);
+        setUser(apiUser);
+        localStorage.setItem('token', apiToken);
+        API.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
     };
 
-    // Logout
     const logout = () => {
         setUser(null);
         setToken(null);
         localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('refreshToken');
+        delete API.defaults.headers.common['Authorization'];
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, register, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout, register }}>
             {children}
         </AuthContext.Provider>
     );

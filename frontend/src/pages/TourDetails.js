@@ -1,14 +1,14 @@
 // frontend/src/pages/TourDetails.js
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import API from '../api'; // centralized API
-import { AuthContext } from '../context/AuthContext';
 
 export default function TourDetails({ onBookNowClick }) {
     const { id } = useParams();
     const [tour, setTour] = useState(null);
-    const { token } = useContext(AuthContext);
+
+    console.log('TourDetails received onBookNowClick:', onBookNowClick);
 
     useEffect(() => {
         const fetchTour = async () => {

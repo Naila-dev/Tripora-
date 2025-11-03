@@ -14,7 +14,7 @@ export default function Register({ onSwitchToLogin, onSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register(name, email, password, phone);
+            await register({ name, email, password, phone });
             if (onSuccess) onSuccess(); // Close the modal on success
             navigate('/');
         } catch (err) {
