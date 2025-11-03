@@ -1,6 +1,6 @@
 // frontend/src/App.js
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import AdminDashboard from "./pages/AdminDashboard";  
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -20,10 +20,10 @@ import AdminLogin from "./pages/AdminLogin";
 import BookingModal from "./components/BookingModal";
 
 function App() {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState(null); // 'login', 'register', or null
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [tourForBooking, setTourForBooking] = useState(null);
+  const location = useLocation();
 
   const openBookingModal = (tour) => {
     setTourForBooking(tour);
@@ -32,16 +32,15 @@ function App() {
 
   // Close all modals when navigating
   useEffect(() => {
-    setIsLoginOpen(false);
-    setIsRegisterOpen(false);
+    setActiveModal(null);
     setIsBookingOpen(false);
-  }, [Route]);
+  }, [location]);
 
   return (
     <>
       <Navbar 
-        onLoginClick={() => setIsLoginOpen(true)}
-        onRegisterClick={() => setIsRegisterOpen(true)}
+        onLoginClick={() => setActiveModal('login')}
+        onRegisterClick={() => setActiveModal('register')}
       />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -58,12 +57,12 @@ function App() {
       <Footer />
 
       {/* Authentication Modals */}
-      {(isLoginOpen || isRegisterOpen) && (
-        <div className="auth-modal-overlay" onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}>
+      {(activeModal === 'login' || activeModal === 'register') && (
+        <div className="auth-modal-overlay" onClick={() => setActiveModal(null)}>
           <div className="auth-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="auth-modal-close" onClick={() => { setIsLoginOpen(false); setIsRegisterOpen(false); }}>&times;</button>
-            {isLoginOpen && <Login onSwitchToRegister={() => { setIsLoginOpen(false); setIsRegisterOpen(true); }} onSuccess={() => setIsLoginOpen(false)} />}
-            {isRegisterOpen && <Register onSwitchToLogin={() => { setIsRegisterOpen(false); setIsLoginOpen(true); }} onSuccess={() => setIsRegisterOpen(false)} />}
+            <button className="auth-modal-close" onClick={() => setActiveModal(null)}>&times;</button>
+            {activeModal === 'login' && <Login onSwitchToRegister={() => setActiveModal('register')} onSuccess={() => setActiveModal(null)} />}
+            {activeModal === 'register' && <Register onSwitchToLogin={() => setActiveModal('login')} onSuccess={() => setActiveModal(null)} />}
           </div>
         </div>
       )}
@@ -73,7 +72,7 @@ function App() {
         <BookingModal
           tour={tourForBooking}
           onClose={() => setIsBookingOpen(false)}
-          onLoginClick={() => { setIsBookingOpen(false); setIsLoginOpen(true); }}
+          onLoginClick={() => { setIsBookingOpen(false); setActiveModal('login'); }}
         />
       )}
     </>

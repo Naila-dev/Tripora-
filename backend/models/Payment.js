@@ -16,6 +16,9 @@ const paymentSchema = new mongoose.Schema({
     enum: ["processing", "completed", "failed"],
     default: "processing",
   },
+  mpesaReceiptNumber: { type: String },
+  checkoutRequestId: { type: String, index: true }, // For finding the payment on callback
+  merchantRequestId: { type: String, index: true },
   paidAt: {
     type: Date,
   },
@@ -30,4 +33,3 @@ const paymentSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Payment", paymentSchema);
-

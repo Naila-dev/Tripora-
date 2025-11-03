@@ -18,6 +18,18 @@ const getAccessToken = async () => {
   return response.data.access_token;
 };
 
+// Helper: Format phone number to 254...
+const formatPhoneNumber = (phone) => {
+  if (phone.startsWith('0')) {
+    return `254${phone.substring(1)}`;
+  }
+  if (phone.startsWith('+254')) {
+    return phone.substring(1);
+  }
+  // Assume it's already in the correct format if none of the above
+  return phone;
+};
+
 // Initiate STK Push
 exports.stkPush = async (req, res) => {
   try {
@@ -26,6 +38,8 @@ exports.stkPush = async (req, res) => {
     if (!phone || !amount || !bookingId) {
       return res.status(400).json({ message: "Phone, amount, and booking ID are required" });
     }
+
+    const formattedPhone = formatPhoneNumber(phone);
 
     // Verify booking exists
     const booking = await Booking.findById(bookingId);
@@ -50,9 +64,9 @@ exports.stkPush = async (req, res) => {
       Timestamp: timestamp,
       TransactionType: "CustomerPayBillOnline",
       Amount: amount,
-      PartyA: phone,
+      PartyA: formattedPhone,
       PartyB: process.env.MPESA_SHORTCODE,
-      PhoneNumber: phone,
+      PhoneNumber: formattedPhone,
       CallBackURL: process.env.MPESA_CALLBACK_URL,
       AccountReference: "TriporaBooking",
       TransactionDesc: "Tour booking payment",
@@ -65,9 +79,68 @@ exports.stkPush = async (req, res) => {
     );
 
     res.status(200).json({ message: "STK push initiated", payment, data: response.data });
-  } catch (err) {
-    console.error("STK push error:", err.response?.data || err.message);
-    res.status(500).json({ message: "Failed to initiate STK push" });
+} catch (err) {
+  console.error("STK push error:", err.response?.data || err.message || err);
+  res.status(500).json({
+    message: "Failed to initiate STK push",
+    error: err.response?.data || err.message || err,
+  });
+}
+
+};
+
+// Handle M-Pesa STK Push confirmation callback
+exports.confirmPayment = async (req, res) => {
+  console.log("Full M-Pesa callback body:", JSON.stringify(req.body, null, 2));
+
+  try {
+    const { Body } = req.body;
+    if (!Body || !Body.stkCallback) {
+      return res.status(400).json({ error: "Invalid callback payload" });
+    }
+
+    const { MerchantRequestID, CheckoutRequestID, ResultCode, ResultDesc, CallbackMetadata } = Body.stkCallback;
+
+    // Find the payment record using the CheckoutRequestID
+    const payment = await Payment.findOne({ checkoutRequestId: CheckoutRequestID });
+
+    if (!payment) {
+      console.error(`Payment not found for CheckoutRequestID: ${CheckoutRequestID}`);
+      // Respond to Safaricom but don't throw an error that crashes the server
+      return res.status(404).json({ message: "Payment record not found" });
+    }
+
+    if (ResultCode === 0) {
+      // Payment was successful
+      const metadata = CallbackMetadata.Item.reduce((acc, item) => {
+        acc[item.Name] = item.Value;
+        return acc;
+      }, {});
+
+      payment.status = "completed";
+      payment.mpesaReceiptNumber = metadata.MpesaReceiptNumber;
+      payment.paidAt = new Date(); // Or parse from metadata.TransactionDate
+      
+      // Update the corresponding booking status
+      await Booking.findByIdAndUpdate(payment.booking, { status: "paid" });
+
+    } else {
+      // Payment failed or was cancelled
+      payment.status = "failed";
+      payment.error = {
+        code: ResultCode,
+        message: ResultDesc,
+      };
+    }
+
+    await payment.save();
+
+    // Acknowledge receipt of the callback to Safaricom
+    res.status(200).json({ message: "Callback received successfully" });
+
+  } catch (error) {
+    console.error("Failed to process callback:", error);
+    res.status(500).json({ error: "Failed to process callback" });
   }
 };
 

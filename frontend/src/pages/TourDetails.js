@@ -27,8 +27,17 @@ export default function TourDetails({ onBookNowClick }) {
     return (
         <div className="tour-details-page">
             {/* Hero Image Section */}
-            <section className="tour-hero" style={{ backgroundImage: `url(${tour.image || 'https://via.placeholder.com/1200x500'})` }}>
-                <div className="hero-overlay"></div>
+            <section className="tour-hero" style={{ 
+                backgroundImage: `url(${tour.image || 'https://via.placeholder.com/1200x500'})`,
+                position: 'relative' // Ensure the overlay is contained
+            }}>
+                <div className="hero-overlay" style={{
+                    position: 'absolute', // Position relative to the section
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0
+                }}></div>
                 <div className="hero-content text-white text-center">
                     <h1 className="display-4 fw-bold">{tour.title}</h1>
                     <p className="lead">{tour.location}</p>
