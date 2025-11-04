@@ -1,7 +1,7 @@
 // backend/routes/bookings.js
 const express = require('express');
 const Booking = require('../models/Booking');
-const protect = require('../middleware/authMIddleware');
+const protect = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Create booking
