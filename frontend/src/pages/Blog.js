@@ -46,6 +46,26 @@ const allPosts = [
     category: "Travel Tips",
     tags: ["Packing", "Tips", "Beach"],
   },
+  {
+    id: 5,
+    title: "The Great Migration: A Witness to Nature's Grandeur",
+    image: "/images/migration.jpeg",
+    author: "John Smith",
+    date: "October 12, 2023",
+    excerpt: "Witnessing the great wildebeest migration in the Maasai Mara is a once-in-a-lifetime experience. Here's how to plan your trip.",
+    category: "Destinations",
+    tags: ["Migration", "Kenya", "Wildlife"],
+  },
+  {
+    id: 6,
+    title: "Sustainable Tourism: How to Travel Responsibly",
+    image: "/images/sailboat-9597523_1280.jpg",
+    author: "Amina Yusuf",
+    date: "October 10, 2023",
+    excerpt: "Learn how your travel choices can make a positive impact on the environment and local communities. Be a part of the change.",
+    category: "Travel Tips",
+    tags: ["Sustainability", "Eco-friendly", "Responsible Travel"],
+  },
 ];
 
 const BlogPage = () => {
@@ -163,4 +183,3 @@ const BlogPage = () => {
 };
 
 export default BlogPage;
-

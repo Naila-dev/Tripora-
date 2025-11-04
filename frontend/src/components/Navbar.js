@@ -1,56 +1,29 @@
-// frontend/src/components/Navbar.js
-import { useContext } from "react";
-import { NavLink } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import "../styles/navbar.css";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import '../styles/navbar.css'; // Import the new CSS file
 
 export default function Navbar({ onLoginClick, onRegisterClick }) {
-  const { user, logout } = useContext(AuthContext);
-
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        {/* Left Column: Logo + Site Name */}
-        <div className="navbar-column navbar-left-column">
-          <img
-            src="./images/logo.png"
-            alt="Tripora Logo"
-            className="navbar-logo"
-          />
-          <h1 className="navbar-title">
-            Tripora <span>Tours</span>
-          </h1>
-        </div>
+    <nav className="navbar-container">
+      {/* Left Side */}
+      <NavLink to="/" className="navbar-brand">
+        <img src="images/logo.png" alt="Tripora Logo" className="navbar-logo" />
+        <span className="navbar-title">Tripora</span> Tours
+      </NavLink>
 
-        {/* Right Column: Links + Auth Buttons */}
-        <div className="navbar-column navbar-right-column">
-          <div className="navbar-links">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/about">About Us</NavLink>
-            <NavLink to="/blog">Blog</NavLink>
-            <NavLink to="/tours-list">Tours</NavLink>
-            <NavLink to="/contact">Contacts</NavLink>
-          </div>
+      {/* Right Side */}
+      <div className="navbar-right">
+        <ul className="navbar-links">
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/about">About</NavLink></li>cd ba
+          <li><NavLink to="/tours-list">Tours</NavLink></li>
+          <li><NavLink to="/blog">Blog</NavLink></li>
+          <li><NavLink to="/contact">Contact</NavLink></li>
+        </ul>
 
-          <div className="navbar-auth">
-            {user ? (
-              <>
-                <span className="navbar-username">Hello, {user.name}</span>
-                <button onClick={logout} className="btn btn-outline">
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <button onClick={onRegisterClick} className="btn btn-accent">
-                  Sign Up
-                </button>
-                <button onClick={onLoginClick} className="btn btn-outline">
-                  Login
-                </button>
-              </>
-            )}
-          </div>
+        <div className="navbar-auth">
+          <button onClick={onLoginClick} className="btn btn-outline-success">Login</button>
+          <button onClick={onRegisterClick} className="btn btn-success">Sign Up</button>
         </div>
       </div>
     </nav>

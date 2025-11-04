@@ -1,5 +1,6 @@
 // frontend/src/pages/Contacts.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import emailjs from '@emailjs/browser';
 import {
   FaPhone,
   FaEnvelope,
@@ -35,8 +36,9 @@ const faqs = [
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+  const [formStatus, setFormStatus] = useState({ submitting: false, success: false, error: '' });
   const [openFaq, setOpenFaq] = useState(null);
+  const form = useRef();
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -48,8 +50,30 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setFormData({ name: "", email: "", message: "" });
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus({ submitting: false, success: false, error: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setFormStatus({ submitting: true, success: false, error: '' });
+
+    // Replace with your actual EmailJS IDs
+    const serviceID = 'service_bje8ayf';
+    const templateID = 'template_ba6niy4';
+    const publicKey = 'Muui3ftVfTtcadUcc';
+
+    emailjs.sendForm(serviceID, templateID, form.current, publicKey)
+      .then((result) => {
+        console.log('EmailJS Success:', result.text);
+        setFormStatus({ submitting: false, success: true, error: '' });
+        setFormData({ name: "", email: "", message: "" }); // Clear form
+      }, (error) => {
+        console.error('EmailJS Error:', error.text);
+        setFormStatus({ submitting: false, success: false, error: 'Failed to send message. Please try again.' });
+      });
   };
 
   return (
@@ -111,12 +135,18 @@ const Contact = () => {
     </div>
 
     <div className="col-md-8 h-100" data-aos="fade-left">
-      {submitted && (
+      {formStatus.success && (
         <div className="alert alert-success mb-3 h-100" role="alert">
           Thank you! We’ll get back to you within 24 hours.
         </div>
       )}
+      {formStatus.error && (
+        <div className="alert alert-danger mb-3 h-100" role="alert">
+          {formStatus.error}
+        </div>
+      )}
       <form
+        ref={form}
         onSubmit={handleSubmit}
         className="contact-form shadow-sm p-4 rounded bg-white h-100"
       >
@@ -132,7 +162,9 @@ const Contact = () => {
           <label>Message</label>
           <textarea name="message" value={formData.message} onChange={handleChange} className="form-control" rows="5" required />
         </div>
-        <button type="submit" className="btn btn-primary w-100">Send Message</button>
+        <button type="submit" className="btn btn-primary w-100" disabled={formStatus.submitting}>
+          {formStatus.submitting ? 'Sending...' : 'Send Message'}
+        </button>
       </form>
     </div>
   </div>
